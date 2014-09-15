@@ -1,18 +1,19 @@
 **ModelFit**
 ---------
 ---------
-The offline fitting tool described in my paper <http://cims.nyu.edu/~tompson/others/TOG_2014_paper_PREPRINT.pdf>.  This code was used to put together the NYU Hand Pose Dataset <http://cims.nyu.edu/~tompson/NYU_Hand_Pose_Dataset.htm>.  I use a Primesense Carmine 1.09 to capture the depth cloud and RGB.
+The offline fitting tool described in my paper "Real-Time Continuous Pose Recovery of Human Hands Using
+Convolutional Networks" (Jonathan Tompson, Murphy Stein, Yann Lecun, Ken Perlin).  This code was used to fit the frames in the NYU Hand Pose Dataset <http://cims.nyu.edu/~tompson/NYU_Hand_Pose_Dataset.htm>.  Note that I used a Primesense Carmine 1.09 to capture the depth cloud and RGB, however this code shouldn't be limited to this device (as long as you adjust the relevant camera parameters).
 
 **Overview**
 --------
 
-This code is provided **as-is**.  While the quality of the code is not inherently bad, it's just not well organized or user-friendly.
-
-The work-flow is described below.  
+A word of warning: this code is provided **as-is**.  While the quality of the code is not inherently bad, it's just not well organized or user-friendly.
 
 Note that I have made available example data at <http://blackbox.cs.nyu.edu/model_fit_example_data.zip>.  I highly suggest you download it and extract it into the ```ModelFit/data/``` directory as it is all set up and ready to go.
 
 Lastly, I want to say that the UI is not all that intuitive or easy to use, and for this I apologize.  It is driven by a combination of keystrokes and mouse movements.  At the start of each program a list of possible keystrokes will be printed to the command window.
+
+The work-flow is described below.  
 
 ----------
 Part 1
