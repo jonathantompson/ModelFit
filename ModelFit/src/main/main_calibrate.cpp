@@ -65,7 +65,7 @@
 #define ICP_MIN_DISTANCE_SQ 1.0f
 #define ICP_MAX_DISTANCE_SQ 1600.0f  // 4cm ^ 2 = 40mm ^ 2
 #define MAX_ICP_PTS 100000 
-#define GDT_MAX_DIST 2000
+#define GDT_MAX_DIST 5000
 #define MAX_KINECTS 3
 #define NUM_WORKER_THREADS 6
 #define IM_DIR std::string("../data/calib/")
@@ -200,7 +200,7 @@ void loadCurrentImage(bool print_to_screen = true) {
   for (int32_t k = 0; k < MAX_KINECTS; k++) {
     for (int32_t i = 0; i < src_dim; i++) {
       uint32_t filt = 0;
-      for (int32_t f = cur_image; f < cur_image + FILTER_SIZE && 
+      for (int32_t f = (int32_t)cur_image; f < (int32_t)cur_image + FILTER_SIZE && 
         f < (int32_t)im_files[k].size(); f++, filt++) {
         cur_depth[filt] = depth_database[k][f][i];
       }

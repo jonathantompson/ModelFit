@@ -172,7 +172,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_AMD64_;FREEIMAGE_LIB;HAND_FIT;NDEBUG;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)../kinect_interface/include;$(ProjectDir)FreeImage3154/include;$(ProjectDir)assimp_3.0.1270/include;$(ProjectDir)src;$(ProjectDir)eigen-3.1.1/Eigen;$(ProjectDir)glfw/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../kinect_interface/include;$(ProjectDir)../include/WIN7/freeimage/;$(ProjectDir)../include/WIN7/assimp/;$(ProjectDir)src</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
       <OpenMPSupport>true</OpenMPSupport>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -180,7 +180,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)glew/bin;$(ProjectDir)assimp_3.0.1270/lib_win7_64;$(ProjectDir)../kinect_interface/build/$(Platform)/$(Configuration)/;$(ProjectDir)FreeImage3154/lib_win7_64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)../lib/WIN7/assimp/;$(ProjectDir)../kinect_interface/build/$(Platform)/$(Configuration)/;$(ProjectDir)../lib/WIN7/freeimage</AdditionalLibraryDirectories>
       <AdditionalDependencies>kinect_interface_d.lib;assimpD.lib;FreeImaged.lib;comctl32.lib;glu32.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>/NODEFAULTLIB:[msvcrt.lib, libcmt.lib, LIBCMT]</IgnoreSpecificDefaultLibraries>
       <AdditionalOptions>/ignore:4099 /ignore:4204 %(AdditionalOptions)</AdditionalOptions>
@@ -199,7 +199,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_AMD64_;FREEIMAGE_LIB;HAND_FIT;NDEBUG;WIN32;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)../kinect_interface/include;$(ProjectDir)FreeImage3154/include;$(ProjectDir)assimp_3.0.1270/include;$(ProjectDir)src;$(ProjectDir)eigen-3.1.1/Eigen;$(ProjectDir)glfw/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../kinect_interface/include;$(ProjectDir)../include/WIN7/freeimage/;$(ProjectDir)../include/WIN7/assimp/;$(ProjectDir)src</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
       <AdditionalOptions>/Qvec-report:1 %(AdditionalOptions)</AdditionalOptions>
@@ -212,7 +212,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>assimp.lib;FreeImage.lib;kinect_interface.lib;comctl32.lib;glu32.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)glew/bin;$(ProjectDir)assimp_3.0.1270/lib_win7_64;$(ProjectDir)../kinect_interface/build/$(Platform)/$(Configuration)/;$(ProjectDir)FreeImage3154/lib_win7_64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)../lib/WIN7/assimp/;$(ProjectDir)../kinect_interface/build/$(Platform)/$(Configuration)/;$(ProjectDir)../lib/WIN7/freeimage</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>/NODEFAULTLIB:[msvcrt.lib, libcmt.lib, LIBCMT]</IgnoreSpecificDefaultLibraries>
       <AdditionalOptions>/ignore:4099 /ignore:4204 %(AdditionalOptions)</AdditionalOptions>
     </Link>
