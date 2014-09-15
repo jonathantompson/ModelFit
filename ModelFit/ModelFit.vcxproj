@@ -1,0 +1,227 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main\main.cpp" />
+    <ClCompile Include="src\model_fit\bounding_sphere.cpp" />
+    <ClCompile Include="src\model_fit\calibrate_geometry.cpp" />
+    <ClCompile Include="src\model_fit\hand_geometry_mesh.cpp" />
+    <ClCompile Include="src\model_fit\model_renderer.cpp" />
+    <ClCompile Include="src\model_fit\model_fit.cpp" />
+    <ClCompile Include="src\model_fit\pose_model.cpp" />
+    <ClCompile Include="src\renderer\camera\camera.cpp" />
+    <ClCompile Include="src\renderer\colors.cpp" />
+    <ClCompile Include="src\renderer\geometry\bone_info.cpp" />
+    <ClCompile Include="src\renderer\geometry\geometry.cpp" />
+    <ClCompile Include="src\renderer\geometry\geometry_colored_boned_mesh.cpp" />
+    <ClCompile Include="src\renderer\geometry\geometry_colored_lines.cpp" />
+    <ClCompile Include="src\renderer\geometry\geometry_colored_mesh.cpp" />
+    <ClCompile Include="src\renderer\geometry\geometry_colored_points.cpp" />
+    <ClCompile Include="src\renderer\geometry\geometry_manager.cpp" />
+    <ClCompile Include="src\renderer\geometry\geometry_points.cpp" />
+    <ClCompile Include="src\renderer\geometry\geometry_textured_boned_mesh.cpp" />
+    <ClCompile Include="src\renderer\geometry\geometry_textured_mesh.cpp" />
+    <ClCompile Include="src\renderer\geometry\geometry_vertices.cpp" />
+    <ClCompile Include="src\renderer\geometry\vertex_bone_data.cpp" />
+    <ClCompile Include="src\renderer\gl_state.cpp" />
+    <ClCompile Include="src\renderer\lights\light.cpp" />
+    <ClCompile Include="src\renderer\lights\light_dir.cpp" />
+    <ClCompile Include="src\renderer\lights\light_dir_handles.cpp" />
+    <ClCompile Include="src\renderer\objects\aabbox.cpp" />
+    <ClCompile Include="src\renderer\open_gl_common.cpp" />
+    <ClCompile Include="src\renderer\renderer.cpp" />
+    <ClCompile Include="src\renderer\shader\shader.cpp" />
+    <ClCompile Include="src\renderer\shader\shader_program.cpp" />
+    <ClCompile Include="src\renderer\texture\texture.cpp" />
+    <ClCompile Include="src\renderer\texture\texture_renderable.cpp" />
+    <ClCompile Include="src\renderer\texture\texture_utils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\model_fit\bounding_sphere.h" />
+    <ClInclude Include="src\model_fit\calibrate_geometry.h" />
+    <ClInclude Include="src\model_fit\hand_geometry_mesh.h" />
+    <ClInclude Include="src\model_fit\model_renderer.h" />
+    <ClInclude Include="src\model_fit\model_fit.h" />
+    <ClInclude Include="src\model_fit\pose_model.h" />
+    <ClInclude Include="src\renderer\camera\camera.h" />
+    <ClInclude Include="src\renderer\colors.h" />
+    <ClInclude Include="src\renderer\geometry\bone_info.h" />
+    <ClInclude Include="src\renderer\geometry\geometry.h" />
+    <ClInclude Include="src\renderer\geometry\geometry_colored_boned_mesh.h" />
+    <ClInclude Include="src\renderer\geometry\geometry_colored_lines.h" />
+    <ClInclude Include="src\renderer\geometry\geometry_colored_mesh.h" />
+    <ClInclude Include="src\renderer\geometry\geometry_colored_points.h" />
+    <ClInclude Include="src\renderer\geometry\geometry_manager.h" />
+    <ClInclude Include="src\renderer\geometry\geometry_points.h" />
+    <ClInclude Include="src\renderer\geometry\geometry_textured_boned_mesh.h" />
+    <ClInclude Include="src\renderer\geometry\geometry_textured_mesh.h" />
+    <ClInclude Include="src\renderer\geometry\geometry_vertices.h" />
+    <ClInclude Include="src\renderer\geometry\vertex_bone_data.h" />
+    <ClInclude Include="src\renderer\gl_state.h" />
+    <ClInclude Include="src\renderer\lights\light.h" />
+    <ClInclude Include="src\renderer\lights\light_dir.h" />
+    <ClInclude Include="src\renderer\lights\light_dir_handles.h" />
+    <ClInclude Include="src\renderer\objects\aabbox.h" />
+    <ClInclude Include="src\renderer\open_gl_common.h" />
+    <ClInclude Include="src\renderer\renderer.h" />
+    <ClInclude Include="src\renderer\shader\shader.h" />
+    <ClInclude Include="src\renderer\shader\shader_location_name_pair.h" />
+    <ClInclude Include="src\renderer\shader\shader_program.h" />
+    <ClInclude Include="src\renderer\texture\texture.h" />
+    <ClInclude Include="src\renderer\texture\texture_renderable.h" />
+    <ClInclude Include="src\renderer\texture\texture_utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\cdepth.frag" />
+    <None Include="shaders\cdepth.vert" />
+    <None Include="shaders\cdepth_skinned.vert" />
+    <None Include="shaders\cdepth_skinned_lbs.vert" />
+    <None Include="shaders\clines.frag" />
+    <None Include="shaders\clines.vert" />
+    <None Include="shaders\cmesh_bone_dlight.frag" />
+    <None Include="shaders\cmesh_bone_dlight.vert" />
+    <None Include="shaders\cmesh_bone_dlight_lbs.vert" />
+    <None Include="shaders\cmesh_dlight.frag" />
+    <None Include="shaders\cmesh_dlight.vert" />
+    <None Include="shaders\common_include.frag" />
+    <None Include="shaders\cpoints.frag" />
+    <None Include="shaders\cpoints.vert" />
+    <None Include="shaders\depth.frag" />
+    <None Include="shaders\depth.vert" />
+    <None Include="shaders\depth_skinned.vert" />
+    <None Include="shaders\depth_skinned_lbs.vert" />
+    <None Include="shaders\downsample2.frag" />
+    <None Include="shaders\downsample2_integ.frag" />
+    <None Include="shaders\downsample4.frag" />
+    <None Include="shaders\downsample4_integ.frag" />
+    <None Include="shaders\downsample5_integ.frag" />
+    <None Include="shaders\fullscreen_null.frag" />
+    <None Include="shaders\fullscreen_quad.frag" />
+    <None Include="shaders\fullscreen_quad.vert" />
+    <None Include="shaders\points.frag" />
+    <None Include="shaders\points.vert" />
+    <None Include="shaders\residue_calc.frag" />
+    <None Include="shaders\residue_calc.vert" />
+    <None Include="shaders\residue_calc_bak.frag" />
+    <None Include="shaders\residue_calc_depth_only.frag" />
+    <None Include="shaders\tmesh_bone_dlight.frag" />
+    <None Include="shaders\tmesh_bone_dlight.vert" />
+    <None Include="shaders\tmesh_bone_dlight_lbs.vert" />
+    <None Include="shaders\tmesh_dlight.frag" />
+    <None Include="shaders\tmesh_dlight.vert" />
+    <None Include="shaders\visualize_cdepth.frag" />
+    <None Include="shaders\visualize_cdepth.vert" />
+    <None Include="shaders\visualize_depth.frag" />
+    <None Include="shaders\visualize_depth.vert" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCTargetsPath Condition="'$(VCTargetsPath11)' != '' and '$(VSVersion)' == '' and '$(VisualStudioVersion)' == ''">$(VCTargetsPath11)</VCTargetsPath>
+  </PropertyGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{223F964D-27C4-484A-8470-ADBF105EB7BF}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>ModelFitPrimesense</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)Build\ModelFitPrimesense\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)Build\ModelFitPrimesense\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)Build\ModelFitPrimesense\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)Build\ModelFitPrimesense\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_AMD64_;FREEIMAGE_LIB;HAND_FIT;NDEBUG;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)../kinect_interface/include;$(ProjectDir)FreeImage3154/include;$(ProjectDir)assimp_3.0.1270/include;$(ProjectDir)src;$(ProjectDir)eigen-3.1.1/Eigen;$(ProjectDir)glfw/include</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <OpenMPSupport>true</OpenMPSupport>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)glew/bin;$(ProjectDir)assimp_3.0.1270/lib_win7_64;$(ProjectDir)../kinect_interface/build/$(Platform)/$(Configuration)/;$(ProjectDir)FreeImage3154/lib_win7_64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kinect_interface_d.lib;assimpD.lib;FreeImaged.lib;comctl32.lib;glu32.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>/NODEFAULTLIB:[msvcrt.lib, libcmt.lib, LIBCMT]</IgnoreSpecificDefaultLibraries>
+      <AdditionalOptions>/ignore:4099 /ignore:4204 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_AMD64_;FREEIMAGE_LIB;HAND_FIT;NDEBUG;WIN32;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)../kinect_interface/include;$(ProjectDir)FreeImage3154/include;$(ProjectDir)assimp_3.0.1270/include;$(ProjectDir)src;$(ProjectDir)eigen-3.1.1/Eigen;$(ProjectDir)glfw/include</AdditionalIncludeDirectories>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <AdditionalOptions>/Qvec-report:1 %(AdditionalOptions)</AdditionalOptions>
+      <OpenMPSupport>true</OpenMPSupport>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>assimp.lib;FreeImage.lib;kinect_interface.lib;comctl32.lib;glu32.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)glew/bin;$(ProjectDir)assimp_3.0.1270/lib_win7_64;$(ProjectDir)../kinect_interface/build/$(Platform)/$(Configuration)/;$(ProjectDir)FreeImage3154/lib_win7_64</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>/NODEFAULTLIB:[msvcrt.lib, libcmt.lib, LIBCMT]</IgnoreSpecificDefaultLibraries>
+      <AdditionalOptions>/ignore:4099 /ignore:4204 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

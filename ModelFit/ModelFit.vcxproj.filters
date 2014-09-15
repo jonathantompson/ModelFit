@@ -1,0 +1,369 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\src">
+      <UniqueIdentifier>{78741596-a4dc-4fb7-8e6c-3fdf38a0d986}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\main">
+      <UniqueIdentifier>{07b115b3-cd68-4389-a918-e591ca1fd010}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\renderer">
+      <UniqueIdentifier>{72199aa6-e699-42f5-bceb-0576c776889d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\renderer\camera">
+      <UniqueIdentifier>{ed5af366-9dc1-4a73-aad9-4d2a8aac03b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\renderer\geometry">
+      <UniqueIdentifier>{a0bd125d-940f-4a49-89df-fb343272267f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\renderer\lights">
+      <UniqueIdentifier>{714d4bab-1d07-4161-9830-cad7b46579c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\renderer\objects">
+      <UniqueIdentifier>{7ec131f7-21b1-4f7f-a157-50f1dd4ec6b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\renderer\shader">
+      <UniqueIdentifier>{58f1a638-e07d-453a-ad8c-f59b6986d999}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\renderer\texture">
+      <UniqueIdentifier>{689a7b5a-be31-4450-aabd-b0003ab9b1e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{85e2da50-ebe2-4a02-aded-017e44bef53e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\model_fit">
+      <UniqueIdentifier>{b3376c1f-f7e9-4abf-8dfd-ef1122eb4592}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main\main.cpp">
+      <Filter>Source Files\src\main</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\colors.cpp">
+      <Filter>Source Files\src\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\open_gl_common.cpp">
+      <Filter>Source Files\src\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\renderer.cpp">
+      <Filter>Source Files\src\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\texture\texture.cpp">
+      <Filter>Source Files\src\renderer\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\texture\texture_renderable.cpp">
+      <Filter>Source Files\src\renderer\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\shader\shader_program.cpp">
+      <Filter>Source Files\src\renderer\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\shader\shader.cpp">
+      <Filter>Source Files\src\renderer\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\objects\aabbox.cpp">
+      <Filter>Source Files\src\renderer\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\lights\light.cpp">
+      <Filter>Source Files\src\renderer\lights</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\lights\light_dir.cpp">
+      <Filter>Source Files\src\renderer\lights</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\lights\light_dir_handles.cpp">
+      <Filter>Source Files\src\renderer\lights</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\geometry\geometry_points.cpp">
+      <Filter>Source Files\src\renderer\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\geometry\geometry_vertices.cpp">
+      <Filter>Source Files\src\renderer\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\geometry\geometry.cpp">
+      <Filter>Source Files\src\renderer\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\geometry\geometry_colored_mesh.cpp">
+      <Filter>Source Files\src\renderer\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\camera\camera.cpp">
+      <Filter>Source Files\src\renderer\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\geometry\geometry_colored_points.cpp">
+      <Filter>Source Files\src\renderer\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\texture\texture_utils.cpp">
+      <Filter>Source Files\src\renderer\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\geometry\geometry_textured_mesh.cpp">
+      <Filter>Source Files\src\renderer\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\geometry\geometry_textured_boned_mesh.cpp">
+      <Filter>Source Files\src\renderer\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\geometry\geometry_manager.cpp">
+      <Filter>Source Files\src\renderer\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\geometry\bone_info.cpp">
+      <Filter>Source Files\src\renderer\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\geometry\vertex_bone_data.cpp">
+      <Filter>Source Files\src\renderer\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\geometry\geometry_colored_boned_mesh.cpp">
+      <Filter>Source Files\src\renderer\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\gl_state.cpp">
+      <Filter>Source Files\src\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\model_fit\bounding_sphere.cpp">
+      <Filter>Source Files\src\model_fit</Filter>
+    </ClCompile>
+    <ClCompile Include="src\model_fit\hand_geometry_mesh.cpp">
+      <Filter>Source Files\src\model_fit</Filter>
+    </ClCompile>
+    <ClCompile Include="src\model_fit\model_fit.cpp">
+      <Filter>Source Files\src\model_fit</Filter>
+    </ClCompile>
+    <ClCompile Include="src\model_fit\model_renderer.cpp">
+      <Filter>Source Files\src\model_fit</Filter>
+    </ClCompile>
+    <ClCompile Include="src\model_fit\pose_model.cpp">
+      <Filter>Source Files\src\model_fit</Filter>
+    </ClCompile>
+    <ClCompile Include="src\model_fit\calibrate_geometry.cpp">
+      <Filter>Source Files\src\model_fit</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\geometry\geometry_colored_lines.cpp">
+      <Filter>Source Files\src\renderer\geometry</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\renderer\colors.h">
+      <Filter>Source Files\src\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\open_gl_common.h">
+      <Filter>Source Files\src\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\renderer.h">
+      <Filter>Source Files\src\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\texture\texture_renderable.h">
+      <Filter>Source Files\src\renderer\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\texture\texture.h">
+      <Filter>Source Files\src\renderer\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\shader\shader_program.h">
+      <Filter>Source Files\src\renderer\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\shader\shader.h">
+      <Filter>Source Files\src\renderer\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\shader\shader_location_name_pair.h">
+      <Filter>Source Files\src\renderer\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\objects\aabbox.h">
+      <Filter>Source Files\src\renderer\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\lights\light_dir_handles.h">
+      <Filter>Source Files\src\renderer\lights</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\lights\light.h">
+      <Filter>Source Files\src\renderer\lights</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\lights\light_dir.h">
+      <Filter>Source Files\src\renderer\lights</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\geometry\geometry_colored_mesh.h">
+      <Filter>Source Files\src\renderer\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\geometry\geometry_points.h">
+      <Filter>Source Files\src\renderer\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\geometry\geometry_vertices.h">
+      <Filter>Source Files\src\renderer\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\geometry\geometry.h">
+      <Filter>Source Files\src\renderer\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\camera\camera.h">
+      <Filter>Source Files\src\renderer\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\geometry\geometry_colored_points.h">
+      <Filter>Source Files\src\renderer\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\texture\texture_utils.h">
+      <Filter>Source Files\src\renderer\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\geometry\geometry_textured_mesh.h">
+      <Filter>Source Files\src\renderer\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\geometry\geometry_manager.h">
+      <Filter>Source Files\src\renderer\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\geometry\geometry_textured_boned_mesh.h">
+      <Filter>Source Files\src\renderer\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\geometry\vertex_bone_data.h">
+      <Filter>Source Files\src\renderer\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\geometry\bone_info.h">
+      <Filter>Source Files\src\renderer\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\geometry\geometry_colored_boned_mesh.h">
+      <Filter>Source Files\src\renderer\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\gl_state.h">
+      <Filter>Source Files\src\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\model_fit\bounding_sphere.h">
+      <Filter>Source Files\src\model_fit</Filter>
+    </ClInclude>
+    <ClInclude Include="src\model_fit\hand_geometry_mesh.h">
+      <Filter>Source Files\src\model_fit</Filter>
+    </ClInclude>
+    <ClInclude Include="src\model_fit\model_fit.h">
+      <Filter>Source Files\src\model_fit</Filter>
+    </ClInclude>
+    <ClInclude Include="src\model_fit\pose_model.h">
+      <Filter>Source Files\src\model_fit</Filter>
+    </ClInclude>
+    <ClInclude Include="src\model_fit\model_renderer.h">
+      <Filter>Source Files\src\model_fit</Filter>
+    </ClInclude>
+    <ClInclude Include="src\model_fit\calibrate_geometry.h">
+      <Filter>Source Files\src\model_fit</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\geometry\geometry_colored_lines.h">
+      <Filter>Source Files\src\renderer\geometry</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\depth.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\depth_skinned.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\depth_skinned_lbs.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\downsample2.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\downsample2_integ.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\downsample4.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\downsample4_integ.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\fullscreen_null.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\fullscreen_quad.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\fullscreen_quad.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\points.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\points.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\residue_calc.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\tmesh_bone_dlight.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\tmesh_bone_dlight.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\tmesh_bone_dlight_lbs.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\tmesh_dlight.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\tmesh_dlight.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\visualize_cdepth.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\visualize_cdepth.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\visualize_depth.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\visualize_depth.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\cdepth.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\cdepth.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\cdepth_skinned.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\cdepth_skinned_lbs.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\cmesh_bone_dlight.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\cmesh_bone_dlight.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\cmesh_bone_dlight_lbs.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\cmesh_dlight.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\cmesh_dlight.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\common_include.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\cpoints.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\cpoints.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\depth.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\residue_calc.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\residue_calc_bak.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\downsample5_integ.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\residue_calc_depth_only.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\clines.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\clines.vert">
+      <Filter>shaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>

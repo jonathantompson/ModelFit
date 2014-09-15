@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ModelFit", "ModelFit\ModelFit.vcxproj", "{223F964D-27C4-484A-8470-ADBF105EB7BF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9B9648C2-7A2F-4335-BE1B-A879A608B57E} = {9B9648C2-7A2F-4335-BE1B-A879A608B57E}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "kinect_interface", "kinect_interface\kinect_interface.vcxproj", "{9B9648C2-7A2F-4335-BE1B-A879A608B57E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CalibrateKinects", "ModelFit\CalibrateKinects.vcxproj", "{ACE0B96E-FA05-4321-8AD5-1ECBA400FCFC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9B9648C2-7A2F-4335-BE1B-A879A608B57E} = {9B9648C2-7A2F-4335-BE1B-A879A608B57E}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{223F964D-27C4-484A-8470-ADBF105EB7BF}.Debug|x64.ActiveCfg = Debug|x64
+		{223F964D-27C4-484A-8470-ADBF105EB7BF}.Debug|x64.Build.0 = Debug|x64
+		{223F964D-27C4-484A-8470-ADBF105EB7BF}.Release|x64.ActiveCfg = Release|x64
+		{223F964D-27C4-484A-8470-ADBF105EB7BF}.Release|x64.Build.0 = Release|x64
+		{9B9648C2-7A2F-4335-BE1B-A879A608B57E}.Debug|x64.ActiveCfg = Debug|x64
+		{9B9648C2-7A2F-4335-BE1B-A879A608B57E}.Debug|x64.Build.0 = Debug|x64
+		{9B9648C2-7A2F-4335-BE1B-A879A608B57E}.Release|x64.ActiveCfg = Release|x64
+		{9B9648C2-7A2F-4335-BE1B-A879A608B57E}.Release|x64.Build.0 = Release|x64
+		{ACE0B96E-FA05-4321-8AD5-1ECBA400FCFC}.Debug|x64.ActiveCfg = Debug|x64
+		{ACE0B96E-FA05-4321-8AD5-1ECBA400FCFC}.Debug|x64.Build.0 = Debug|x64
+		{ACE0B96E-FA05-4321-8AD5-1ECBA400FCFC}.Release|x64.ActiveCfg = Release|x64
+		{ACE0B96E-FA05-4321-8AD5-1ECBA400FCFC}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

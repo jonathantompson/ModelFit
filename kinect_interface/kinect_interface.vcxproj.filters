@@ -1,0 +1,368 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{df080ff7-7059-4efd-8cd9-7eb7415ab23c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{7b66bb95-66aa-47d5-a563-deb915564c8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\math">
+      <UniqueIdentifier>{5cf1125d-9fe2-46c4-8092-3fe906fa5319}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\math">
+      <UniqueIdentifier>{2a81ba79-fc28-4f9a-a58e-91e520b41e66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Eigen">
+      <UniqueIdentifier>{b123cc75-4aaf-49ec-aaef-8c12491a1058}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\data_str">
+      <UniqueIdentifier>{bb402667-393b-4891-8f47-59d7830f434c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\data_str">
+      <UniqueIdentifier>{6609d9be-dd70-44e5-85b8-4b42d1b852c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\string_util">
+      <UniqueIdentifier>{67ad1e00-fc2c-4771-b1b0-e579b0ce4e0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\string_util">
+      <UniqueIdentifier>{3255f2f1-87bb-46dd-bfd1-78df3e84f2ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\threading">
+      <UniqueIdentifier>{206d8328-8f66-40ce-bdbd-681ef14ef996}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\threading">
+      <UniqueIdentifier>{4e351a3c-3d40-4053-be42-2b61181df219}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\nanoflann">
+      <UniqueIdentifier>{45d198dc-be71-42c6-b676-679865aade7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\image_util">
+      <UniqueIdentifier>{d8249ed9-7cb2-4dde-b111-9c92f3214624}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\clk">
+      <UniqueIdentifier>{3175e491-ccd8-4845-a263-b1509228c26e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\image_util">
+      <UniqueIdentifier>{b4d561aa-997e-44c5-90f5-378a000b5fa3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\windowing">
+      <UniqueIdentifier>{07caf906-87a1-428a-bc65-5f9692f1782e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\windowing">
+      <UniqueIdentifier>{9e293635-a38d-4a5b-9503-187dce9edfcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\glew">
+      <UniqueIdentifier>{bceaebe4-e030-4a0b-af76-209bbec4d7b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\glew">
+      <UniqueIdentifier>{db277e86-181d-4739-949b-9737555a11ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\file_io">
+      <UniqueIdentifier>{71142304-054d-4e92-99d4-b5563c5801d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\file_io">
+      <UniqueIdentifier>{fa790fd9-bd12-4eb8-9df8-33159b82e521}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\fastlz">
+      <UniqueIdentifier>{b516b934-a139-45b5-876c-38187ce902f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\fastlz">
+      <UniqueIdentifier>{0e778ef6-b1be-4d83-ac10-079671a6287d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\kinect_interface_primesense">
+      <UniqueIdentifier>{bec4fd56-fca2-4f7a-bd0f-f80af40535cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\kinect_interface_primesense">
+      <UniqueIdentifier>{1366ef51-55c2-44de-b2fa-06104a8607de}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\kinect_interface_primesense\kinect_interface_primesense.cpp">
+      <Filter>Source Files\kinect_interface_primesense</Filter>
+    </ClCompile>
+    <ClCompile Include="src\kinect_interface_primesense\open_ni_funcs.cpp">
+      <Filter>Source Files\kinect_interface_primesense</Filter>
+    </ClCompile>
+    <ClCompile Include="src\kinect_interface_primesense\kinect_device_listener.cpp">
+      <Filter>Source Files\kinect_interface_primesense</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\math_base.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\pso.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\pso_parallel.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\common_optimization.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\decompose.c">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\icp.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\icp_eigen_data.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\data_str\hash_funcs.cpp">
+      <Filter>Source Files\data_str</Filter>
+    </ClCompile>
+    <ClCompile Include="src\string_util\string_util.cpp">
+      <Filter>Source Files\string_util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\string_util\md5c.c">
+      <Filter>Source Files\string_util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\threading\thread.cpp">
+      <Filter>Source Files\threading</Filter>
+    </ClCompile>
+    <ClCompile Include="src\threading\thread_pool.cpp">
+      <Filter>Source Files\threading</Filter>
+    </ClCompile>
+    <ClCompile Include="src\image_util\image_util.cpp">
+      <Filter>Source Files\image_util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\windowing\window_settings.cpp">
+      <Filter>Source Files\windowing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\windowing\window_win32.cpp">
+      <Filter>Source Files\windowing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\windowing\message_dialog_win32.cpp">
+      <Filter>Source Files\windowing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\windowing\window.cpp">
+      <Filter>Source Files\windowing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glew\glewinfo.c">
+      <Filter>Source Files\glew</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glew\visualinfo.c">
+      <Filter>Source Files\glew</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glew\glew.c">
+      <Filter>Source Files\glew</Filter>
+    </ClCompile>
+    <ClCompile Include="src\file_io\file_io.cpp">
+      <Filter>Source Files\file_io</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fastlz\fastlz_helper.cpp">
+      <Filter>Source Files\fastlz</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fastlz\fastlz.c">
+      <Filter>Source Files\fastlz</Filter>
+    </ClCompile>
+    <ClCompile Include="src\kinect_interface_primesense\hand_model_coeff.cpp">
+      <Filter>Source Files\kinect_interface_primesense</Filter>
+    </ClCompile>
+    <ClCompile Include="src\kinect_interface_primesense\hand_model.cpp">
+      <Filter>Source Files\kinect_interface_primesense</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\kinect_interface_primesense\depth_image_data.h">
+      <Filter>Header Files\kinect_interface_primesense</Filter>
+    </ClInclude>
+    <ClInclude Include="include\kinect_interface_primesense\kinect_interface_primesense.h">
+      <Filter>Header Files\kinect_interface_primesense</Filter>
+    </ClInclude>
+    <ClInclude Include="include\kinect_interface_primesense\open_ni_funcs.h">
+      <Filter>Header Files\kinect_interface_primesense</Filter>
+    </ClInclude>
+    <ClInclude Include="include\kinect_interface_primesense\calibration_data.h">
+      <Filter>Header Files\kinect_interface_primesense</Filter>
+    </ClInclude>
+    <ClInclude Include="include\kinect_interface_primesense\kinect_device_listener.h">
+      <Filter>Header Files\kinect_interface_primesense</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\mat2x2.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\mat3x3.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\mat4x4.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\math_base.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\math_types.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\noise.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\perlin_noise.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\plane.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\pso.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\pso_parallel.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\quat.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\vec2.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\vec3.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\vec4.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\bfgs.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\common_optimization.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\decompose.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\icp.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\icp_eigen_data.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\lm_fit.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\data_str\hash_map_managed.h">
+      <Filter>Header Files\data_str</Filter>
+    </ClInclude>
+    <ClInclude Include="include\data_str\hash_set.h">
+      <Filter>Header Files\data_str</Filter>
+    </ClInclude>
+    <ClInclude Include="include\data_str\min_heap.h">
+      <Filter>Header Files\data_str</Filter>
+    </ClInclude>
+    <ClInclude Include="include\data_str\pair.h">
+      <Filter>Header Files\data_str</Filter>
+    </ClInclude>
+    <ClInclude Include="include\data_str\triple.h">
+      <Filter>Header Files\data_str</Filter>
+    </ClInclude>
+    <ClInclude Include="include\data_str\vector.h">
+      <Filter>Header Files\data_str</Filter>
+    </ClInclude>
+    <ClInclude Include="include\data_str\vector_managed.h">
+      <Filter>Header Files\data_str</Filter>
+    </ClInclude>
+    <ClInclude Include="include\data_str\circular_buffer.h">
+      <Filter>Header Files\data_str</Filter>
+    </ClInclude>
+    <ClInclude Include="include\data_str\hash_funcs.h">
+      <Filter>Header Files\data_str</Filter>
+    </ClInclude>
+    <ClInclude Include="include\data_str\hash_map.h">
+      <Filter>Header Files\data_str</Filter>
+    </ClInclude>
+    <ClInclude Include="include\string_util\string_util.h">
+      <Filter>Header Files\string_util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\string_util\win32_debug_buffer.h">
+      <Filter>Header Files\string_util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\string_util\macros.h">
+      <Filter>Header Files\string_util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\string_util\md5.h">
+      <Filter>Header Files\string_util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\threading\callback_queue.h">
+      <Filter>Header Files\threading</Filter>
+    </ClInclude>
+    <ClInclude Include="include\threading\callback_queue_item.h">
+      <Filter>Header Files\threading</Filter>
+    </ClInclude>
+    <ClInclude Include="include\threading\thread.h">
+      <Filter>Header Files\threading</Filter>
+    </ClInclude>
+    <ClInclude Include="include\threading\thread_pool.h">
+      <Filter>Header Files\threading</Filter>
+    </ClInclude>
+    <ClInclude Include="include\threading\callback.h">
+      <Filter>Header Files\threading</Filter>
+    </ClInclude>
+    <ClInclude Include="include\threading\callback_instances.h">
+      <Filter>Header Files\threading</Filter>
+    </ClInclude>
+    <ClInclude Include="include\nanoflann\nanoflann.hpp">
+      <Filter>Header Files\nanoflann</Filter>
+    </ClInclude>
+    <ClInclude Include="include\image_util\image_util.h">
+      <Filter>Header Files\image_util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\clk\clk.h">
+      <Filter>Header Files\clk</Filter>
+    </ClInclude>
+    <ClInclude Include="include\windowing\message_dialog_win32.h">
+      <Filter>Header Files\windowing</Filter>
+    </ClInclude>
+    <ClInclude Include="include\windowing\window.h">
+      <Filter>Header Files\windowing</Filter>
+    </ClInclude>
+    <ClInclude Include="include\windowing\window_cb.h">
+      <Filter>Header Files\windowing</Filter>
+    </ClInclude>
+    <ClInclude Include="include\windowing\window_interface.h">
+      <Filter>Header Files\windowing</Filter>
+    </ClInclude>
+    <ClInclude Include="include\windowing\window_settings.h">
+      <Filter>Header Files\windowing</Filter>
+    </ClInclude>
+    <ClInclude Include="include\windowing\glew_copy.h">
+      <Filter>Header Files\windowing</Filter>
+    </ClInclude>
+    <ClInclude Include="include\windowing\glfw.h">
+      <Filter>Header Files\windowing</Filter>
+    </ClInclude>
+    <ClInclude Include="include\windowing\glfw_keys.h">
+      <Filter>Header Files\windowing</Filter>
+    </ClInclude>
+    <ClInclude Include="include\windowing\keys_and_buttons.h">
+      <Filter>Header Files\windowing</Filter>
+    </ClInclude>
+    <ClInclude Include="include\glew\glxew.h">
+      <Filter>Header Files\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="include\glew\wglew.h">
+      <Filter>Header Files\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="include\glew\glew.h">
+      <Filter>Header Files\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="include\file_io\file_io.h">
+      <Filter>Header Files\file_io</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fastlz\fastlz_helper.h">
+      <Filter>Header Files\fastlz</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fastlz\fastlz.h">
+      <Filter>Header Files\fastlz</Filter>
+    </ClInclude>
+    <ClInclude Include="include\kinect_interface_primesense\hand_model_coeff.h">
+      <Filter>Header Files\kinect_interface_primesense</Filter>
+    </ClInclude>
+    <ClInclude Include="include\kinect_interface_primesense\hand_model.h">
+      <Filter>Header Files\kinect_interface_primesense</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="include\Eigen\Eigen">
+      <Filter>Header Files\Eigen</Filter>
+    </None>
+  </ItemGroup>
+</Project>
