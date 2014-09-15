@@ -28,6 +28,7 @@ namespace jtil {
 namespace math {
 
   // Particle Swarm Optimiation
+  template <typename T>
   class PSO {
   public:
     // Set population size (num_agents) to -1 to let the optimizer choose a
@@ -47,42 +48,45 @@ namespace math {
     // - obj_func: Function to minimize.
     // - coeff_norm_func: After coefficient update, some coefficients may need
     //   normalization.  Set to NULL if not needed.
-    void minimize(float* end_c,
-                  const float* start_c,
-                  const float* radius_c,
+    void minimize(T* end_c,
+                  const T* start_c,
+                  const T* radius_c,
                   const bool* angle_coeff,  // can be NULL
-                  const ObjectiveFuncPtr obj_func,
-                  const CoeffUpdateFuncPtr coeff_update_func);  // can be NULL
+                  T (*obj_func)(const T* coeff),  // Objective function pointer
+                  void (*coeff_update_func)(T* coeff));  // coeff update func
+                                                         // ptr, can be NULL
 
     // Termination and Optimization settings:
-    float delta_coeff_termination;  // The spread of the agent coefficients
+    T delta_coeff_termination;  // The spread of the agent coefficients
     uint64_t max_iterations;
-    float phi_p;
-    float phi_g;
+    T phi_p;
+    T phi_g;
     bool verbose;  // Set to true for detailed output
+
+    inline uint32_t num_coeffs() const { return num_coeffs_; }
   
   private:
     uint32_t num_coeffs_;
     uint32_t swarm_size_;
-    float* c_lo_;  // lower bound of search space
-    float* c_hi_;  // upper bound of search space
-    float* cur_c_min_;  // Current lower bound of the swarm's postions
-    float* cur_c_max_;  // Current upper bound of the swarm's postions
-    float* vel_max_;
-    float* delta_c_;
-    float* best_pos_global_;
-    float best_residue_global_;
-    float kappa_;  // Formula from paper
+    T* c_lo_;  // lower bound of search space
+    T* c_hi_;  // upper bound of search space
+    T* cur_c_min_;  // Current lower bound of the swarm's postions
+    T* cur_c_max_;  // Current upper bound of the swarm's postions
+    T* vel_max_;
+    T* delta_c_;
+    T* best_pos_global_;
+    T best_residue_global_;
+    T kappa_;  // Formula from paper
 
-    SwarmNode** swarm_;
+    SwarmNode<T>** swarm_;
 
     static MERSINE_TWISTER_ENG eng;
-    static UNIFORM_REAL_DISTRIBUTION dist_real;
+    static std::tr1::uniform_real_distribution<T> dist_real;
     
-    float interpolateCoeff(const float a, const float interp_val, 
-      const float b, const float c, bool angle);
+    T interpolateCoeff(const T a, const T interp_val, 
+      const T b, const T c, bool angle);
 
-    inline void copyVec(float* dst, const float* src) {
+    inline void copyVec(T* dst, const T* src) {
       memcpy(dst, src, sizeof(dst[0]) * num_coeffs_); }
   };
 

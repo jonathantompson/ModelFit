@@ -38,10 +38,10 @@ namespace math {
     vel_max_ = new float[num_coeffs_];
 
     // Allocate space for the N probe points
-    swarm_ = new SwarmNode*[swarm_size_];
-    ordered_swarm_ = new SwarmNode*[swarm_size_];
+    swarm_ = new SwarmNode<float>*[swarm_size_];
+    ordered_swarm_ = new SwarmNode<float>*[swarm_size_];
     for (uint32_t i = 0; i < swarm_size_; i++) {
-      swarm_[i] = new SwarmNode();
+      swarm_[i] = new SwarmNode<float>();
       swarm_[i]->resize(num_coeffs_);
       ordered_swarm_[i] = swarm_[i];
     }
@@ -212,7 +212,7 @@ namespace math {
 
       // For each particle, i in the swarm:
       for (uint32_t i = 0; i < swarm_size_; i++) {
-        SwarmNode* cur_node = ordered_swarm_[i];
+        SwarmNode<float>* cur_node = ordered_swarm_[i];
 
 #ifdef USE_LPRPSO_UPDATE
         // LPRPSO UPDATE
@@ -301,7 +301,7 @@ namespace math {
         }
         obj_func_parallel_(tiled_residues, tiled_coeffs);
         for (uint32_t j = 0; j < ntiles_; j++) {
-          SwarmNode* cur_node = swarm_[i * ntiles_ + j];
+          SwarmNode<float>* cur_node = swarm_[i * ntiles_ + j];
           cur_node->residue = tiled_residues[j];
           if (cur_node->residue < cur_node->best_residue) {
             cur_node->best_residue = cur_node->residue;
@@ -389,7 +389,7 @@ namespace math {
   // http://en.wikipedia.org/wiki/Insertion_sort
   void PSOParallel::InsertionSortSwarmPts() {
     for (uint32_t i = 1; i < swarm_size_; i++) {
-      SwarmNode* item = ordered_swarm_[i];
+      SwarmNode<float>* item = ordered_swarm_[i];
       uint32_t i_hole = i;
       while (i_hole > 0 && ordered_swarm_[i_hole - 1]->residue > item->residue) {
         // move hole to next smaller index

@@ -53,57 +53,15 @@
 #define SAFE_DELETE(x) if (x != NULL) { delete x; x = NULL; }
 #define SAFE_DELETE_ARR(x) if (x != NULL) { delete[] x; x = NULL; }
 
-// KINECT DATA
-//#define IM_DIR_BASE string("data/hand_depth_data_2013_01_11_1/")  // Fit
-//#define IM_DIR_BASE string("data/hand_depth_data_2013_01_11_2_1/")  // Fit
-//#define IM_DIR_BASE string("data/hand_depth_data_2013_01_11_2_2/")  // Fit
-//#define IM_DIR_BASE string("data/hand_depth_data_2013_01_11_3/")  // Fit
-//#define IM_DIR_BASE string("data/hand_depth_data_2013_03_04_4/")  // Fit
-//#define IM_DIR_BASE string("data/hand_depth_data_2013_03_04_5/")  // Fit
-//#define IM_DIR_BASE string("data/hand_depth_data_2013_03_04_6/")  // Fit
-//#define IM_DIR_BASE string("data/hand_depth_data_2013_03_04_7/")  // Fit (Tr-data)
-
-// PRIMESENSE DATA
-#define BACKUP_HDD
-//#define IM_DIR_BASE string("hand_depth_data/")
-//#define IM_DIR_BASE string("hand_depth_data_2013_05_01_1/")  // Cal + Fit (5405)
-//#define IM_DIR_BASE string("hand_depth_data_2013_05_03_1/")  // Cal + Fit (6533)
-//#define IM_DIR_BASE string("hand_depth_data_2013_05_06_1/")  // Cal + Fit (8709)
-//#define IM_DIR_BASE string("hand_depth_data_2013_05_06_2/")  // Cal + Fit (8469)
-//#define IM_DIR_BASE string("hand_depth_data_2013_05_06_3/")  // Cal + Fit (5815) MURPHY
-#define IM_DIR_BASE string("hand_depth_data_2013_05_08_1/")  // Cal + Fit (2440) (Te-data)
-//#define IM_DIR_BASE string("hand_depth_data_2013_05_19_1/")  // Cal + Fit (5969)
-//#define IM_DIR_BASE string("hand_depth_data_2013_05_19_2/")  // Cal + Fit (6781)
-//#define IM_DIR_BASE string("hand_depth_data_2013_06_15_1/")  // Cal + Fit (3049)
-//#define IM_DIR_BASE string("hand_depth_data_2013_06_15_2/")  // Cal + Fit (7676)
-//#define IM_DIR_BASE string("hand_depth_data_2013_06_15_3/")  // Cal + Fit (4935)
-//#define IM_DIR_BASE string("hand_depth_data_2013_06_15_4/")  // Cal + Fit (9752)
-//#define IM_DIR_BASE string("hand_depth_data_2013_06_15_5/")  //Cal + Fit (5480)  Total: 81013
-
-//#define KINECT_DATA  // Otherwise Primesense 1.09 data
 #define MAX_KINECTS 3
 #define NUM_WORKER_THREADS 6
-
-#if defined(__APPLE__)
-  #error "Apple is not yet supported!"
-#else
-#ifdef BACKUP_HDD
-    //#define KINECT_HANDS_ROOT string("F:/hand_data/")
-    #define KINECT_HANDS_ROOT string("G:/hand_data/")
-  #else
-    #define KINECT_HANDS_ROOT string("./../data/")
-  #endif
-  #define FOREST_ROOT string("./../")
-#endif
+#define CALIB_IM_DIR std::string("../data/calib/")
+#define IM_DIR std::string("../data/hand_data/")
 
 #ifndef HAND_FIT
   #error "HAND_FIT is not defined in the preprocessor definitions!"
 #endif
 
-//#define IM_DIR (KINECT_HANDS_ROOT + IM_DIR_BASE)
-#define IM_DIR (KINECT_HANDS_ROOT + IM_DIR_BASE)
-
-// #define LOAD_AND_SAVE_OLD_FORMAT_COEFFS
 const bool fit_left = false;
 const bool fit_right = true; 
 
@@ -146,17 +104,12 @@ bool shift_down = false;
 Float4x4 camera_view[MAX_KINECTS];
 PoseModel** models;
 int cur_kinect = 0;
-int cur_icp_dst_kinect = 0;
-uint32_t cur_icp_mat = 0;
-int32_t last_icp_kinect = -1;
-bool render_correspondances = true;
-HandModelCoeff** l_hand_coeffs = NULL;  // Left Hand coefficients
-HandModelCoeff** r_hand_coeffs = NULL;  // Right hand coeffs
+jtil::data_str::VectorManaged<HandModelCoeff*> l_hand_coeffs;  // Left Hand coefficients
+jtil::data_str::VectorManaged<HandModelCoeff*> r_hand_coeffs;   // Right hand coeffs
 const uint32_t num_models = (fit_left ? 1 : 0) + (fit_right ? 1 : 0);
 int hand_to_modify = fit_left ? 0 : 1;
 const uint32_t num_coeff = HandCoeff::NUM_PARAMETERS;
 const uint32_t num_coeff_fit = HAND_NUM_COEFF;
-uint32_t num_model_fit_cameras = MAX_KINECTS;
 uint32_t cur_coeff = 0;
 ModelFit* fit = NULL;
 bool continuous_fit = false;  // fit frames continuously each frame
@@ -167,7 +120,8 @@ float** coeff = NULL;  // Temp space only used when performing fit
 float** prev_coeff = NULL; 
 
 // Kinect Image data 
-Vector<Triple<char*, int64_t, int64_t>> im_files[MAX_KINECTS];  // filename, kinect time, global time
+jtil::data_str::VectorManaged<char*> depth_files[MAX_KINECTS];  // [kinect][frame]
+jtil::data_str::VectorManaged<char*> rgb_files[MAX_KINECTS];  
 float cur_xyz_data[MAX_KINECTS][src_dim*3];
 float cur_norm_data[MAX_KINECTS][src_dim*3];
 float cur_uvd_data[MAX_KINECTS][src_dim*3];
@@ -176,7 +130,6 @@ uint8_t** cur_label_data;  // Size: [MAX_KINECTS][src_dim]
 uint8_t cur_image_rgb[MAX_KINECTS][src_dim*3];
 uint32_t cur_image = 0;
 GeometryColoredPoints* geometry_points[MAX_KINECTS];
-GeometryColoredLines* geometry_lines[MAX_KINECTS-1];  // For displaying ICP correspondances
 float temp_xyz[3 * src_dim];
 float temp_rgb[3 * src_dim];
 bool render_depth = true;
@@ -187,9 +140,6 @@ uint8_t tex_data[src_dim * 3];
 const bool color_point_clouds = false;
 const float point_cloud_scale = 4.0f;
 const uint32_t num_point_clouds_to_render = 1;
-
-// ICP
-jtil::math::ICP icp;
 
 // Multithreading
 ThreadPool* tp;
@@ -211,7 +161,9 @@ void quit() {
   SAFE_DELETE_ARR(coeff);
   SAFE_DELETE_ARR(prev_coeff);
   SAFE_DELETE(clk);
-  if (cur_depth_data) {
+  SAFE_DELETE(render);
+  SAFE_DELETE(fit);
+ if (cur_depth_data) {
     for (uint32_t i = 0; i < MAX_KINECTS; i++) {
       SAFE_DELETE_ARR(cur_depth_data[i]);
     }
@@ -223,25 +175,8 @@ void quit() {
     }
   }
   SAFE_DELETE_ARR(cur_label_data);
-  if (l_hand_coeffs) {
-    for (uint32_t i = 0; i < im_files[0].size(); i++) { 
-      delete l_hand_coeffs[i];
-    }
-    delete[] l_hand_coeffs;
-  }
-  if (r_hand_coeffs) {
-    for (uint32_t i = 0; i < im_files[0].size(); i++) {
-      delete r_hand_coeffs[i];
-    }
-    delete[] r_hand_coeffs;
-  }
-  SAFE_DELETE(render);
-  SAFE_DELETE(fit);
   for (uint32_t k = 0; k < MAX_KINECTS; k++) {
     SAFE_DELETE(geometry_points[k]);
-    for (uint32_t i = 0; i < im_files[k].size(); i++) {
-      SAFE_DELETE_ARR(im_files[k][i].first);
-    }
   }
   Texture::shutdownTextureSystem();
   GLState::shutdownGLState();
@@ -250,59 +185,51 @@ void quit() {
   exit(0);
 }
 
-uint32_t findClosestFrame(const uint32_t i_kinect) {
-  if (i_kinect == 0) {
-    return cur_image;
-  }
-  int64_t src_timestamp = im_files[0][cur_image].second;
-  int32_t i_start = 0;
-  int32_t i_end = (int32_t)im_files[i_kinect].size();
-  int32_t frame = i_start;
-  int64_t min_delta_t = std::abs(src_timestamp - im_files[i_kinect][frame].second);
-  for (int32_t i = i_start + 1; i < i_end; i++) {
-    int64_t delta_t = std::abs(src_timestamp - im_files[i_kinect][i].second);
-    if (delta_t < min_delta_t) {
-      min_delta_t = delta_t;
-      frame = i;
-    }
-  }
-  return (uint32_t)frame;
-}
-
 void loadCurrentImage(bool print_to_screen = true) {
-  char* file = im_files[0][cur_image].first;
-  string full_filename = IM_DIR + string(file);
+  char full_path[256];
+
+  string full_filename = IM_DIR + string(depth_files[0][cur_image]);
   if (print_to_screen) {
     std::cout << "loading image: " << full_filename << std::endl;
     std::cout << "cur_image = " << cur_image << " of ";
-    std::cout << im_files[0].size() << std::endl;
+    std::cout << depth_files[0].size() << std::endl;
   }
-  // Now load the other Kinect data
+  // load the Kinect data
   for (uint32_t k = 0; k < MAX_KINECTS; k++) {
-    if (im_files[k].size() == 0) {
-      for (uint32_t j = 0; j < src_dim; j++) {
-        cur_depth_data[k][j] = GDT_MAX_DIST;
-      }
-      memset(cur_label_data[k], 0, sizeof(cur_label_data[k][0]) * src_dim); 
-      memset(cur_image_rgb[k], 0, sizeof(cur_image_rgb[k][0]) * src_dim * 3); 
-    } else {
-      // find the correct file (with smallest timestamp difference) - O(60)
-      uint32_t i_match = findClosestFrame(k);
-      // Now we've found the correct file, load it
-      file = im_files[k][i_match].first;
-      full_filename = IM_DIR + string(file);
-      if (!continuous_play || (cur_image % 30) == 0) {
-        std::cout << "loading image (frame " << cur_image << " of " << 
-          im_files[0].size() << "): " << full_filename << std::endl;
-      }
-      image_io->LoadCompressedImage(full_filename, 
-        cur_depth_data[k], cur_label_data[k], cur_image_rgb[k]);
-      memset(cur_label_data[k], 0, src_dim * sizeof(cur_label_data[k][0]));
-      openni_funcs.ConvertDepthImageToProjective((uint16_t*)cur_depth_data[k], 
-        cur_uvd_data[k]);
-      openni_funcs.convertDepthToWorldCoordinates(cur_uvd_data[k], cur_xyz_data[k], 
-        src_dim);
+    // Load the RGB data
+    uint32_t w, h, nchan;
+    snprintf(full_path, 255, "%s%s", IM_DIR.c_str(), rgb_files[k][cur_image]);
+    uint8_t* rgb = NULL;
+    renderer::Texture::loadImFromFile(full_path, rgb, w, h, nchan);
+    if (!rgb || w != src_width || h != src_height || nchan != 3) {
+      throw std::runtime_error("Data might be corrupted!");
     }
+    memcpy(cur_image_rgb[k], rgb, sizeof(cur_image_rgb[k][0]) * src_dim * 3);
+    delete[] rgb;
+
+    // Load the depth data
+    snprintf(full_path, 255, "%s%s", IM_DIR.c_str(), depth_files[k][cur_image]);
+    renderer::Texture::loadImFromFile(full_path, rgb, w, h, nchan);
+    if (!rgb || w != src_width || h != src_height || nchan != 3) {
+      throw std::runtime_error("Data might be corrupted!");
+    }
+    // Unpack the depth (the MSB is in the green and the LSB in the red)
+    int16_t* cur_depth = new int16_t[src_dim];
+    for (uint32_t i = 0; i < src_dim; i++) {
+      uint8_t g = rgb[i*3+1];
+      uint8_t b = rgb[i*3+2];
+      cur_depth_data[k][i] = (((int16_t)g) << 8) | (int16_t)b;
+    }
+    delete[] rgb;
+
+    // I'm no longer using the labels, so just set them all to true, which
+    // treats all points in the depth cloud as a potential hand point
+    memset(cur_label_data[k], 1, sizeof(cur_label_data[k][0]) * src_dim); 
+
+    openni_funcs.ConvertDepthImageToProjective((uint16_t*)cur_depth_data[k], 
+      cur_uvd_data[k]);
+    openni_funcs.convertDepthToWorldCoordinates(cur_uvd_data[k], cur_xyz_data[k], 
+      src_dim);
   }
 }
 
@@ -339,31 +266,23 @@ void InitXYZPointsForRendering() {
 
 
 void saveCurrentCoeffs() {
-#if defined(CALIBRATION_RUN)
-  // Save both kinect coeffs in the same file
-  string filename = IM_DIR + string("coeff_") + im_files[0][cur_image].first;
-  float calb_data[MAX_KINECTS * num_coeff];
-  for (uint32_t i = 0; i < MAX_KINECTS; i++) {
-    memcpy(&calb_data[i * num_coeff], coeffs[i][cur_image], 
-      sizeof(*calb_data) * num_coeff);
-  }
-  SaveArrayToFile<float>(calb_data, MAX_KINECTS * num_coeff, filename);
-  cout << "hand data saved to file" << endl;
-#else
-  string r_hand_file = string("coeffr_") + im_files[0][cur_image].first;
-  string l_hand_file = string("coeffl_") + im_files[0][cur_image].first;
+  char full_path[256];
+  // Save the right hand coeff
+  snprintf(full_path, 255, "coeffr_%07d.bin", cur_image+1);
   if (fit_right) {
-    r_hand_coeffs[cur_image]->saveToFile(IM_DIR, r_hand_file);
+    r_hand_coeffs[cur_image]->saveToFile(IM_DIR, full_path);
   } else {
-    r_hand_coeffs[cur_image]->saveBlankFile(IM_DIR, r_hand_file);
+    r_hand_coeffs[cur_image]->saveBlankFile(IM_DIR, full_path);
   }
+  cout << "hand data saved to file: " << full_path << endl;
+  // Save the left hand coeff
+  snprintf(full_path, 255, "coeffl_%07d.bin", cur_image+1);
   if (fit_left) {
-    l_hand_coeffs[cur_image]->saveToFile(IM_DIR, l_hand_file);
+    l_hand_coeffs[cur_image]->saveToFile(IM_DIR, full_path);
   } else {
-    l_hand_coeffs[cur_image]->saveBlankFile(IM_DIR, l_hand_file);
+    l_hand_coeffs[cur_image]->saveBlankFile(IM_DIR, full_path);
   }
-  cout << "hand data saved to file" << endl;
-#endif
+  cout << "hand data saved to file: " << full_path << endl;
 }
 
 void MouseButtonCB(int button, int action, int mods) {
@@ -402,8 +321,6 @@ void MousePosCB(double x, double y) {
     float theta_x = dx * mouse_speed_rotation;
     float theta_y = dy * mouse_speed_rotation;
     render->camera()->rotateCamera(theta_x, theta_y);
-    std::cout << "rot = " << std::endl;
-    render->camera()->eye_rot()->print();
   }
   if (scale_coeff) {
     int dy = mouse_y - mouse_y_prev;
@@ -615,7 +532,7 @@ void KeyboardCB(int key, int scancode, int action, int mods) {
       break;
     case KEY_KP_ADD:
       if (action == RELEASED) {
-        cur_image = cur_image < static_cast<uint32_t>(im_files[0].size())-1 ? 
+        cur_image = cur_image < static_cast<uint32_t>(depth_files[0].size())-1 ? 
           cur_image+1 : cur_image;
         loadCurrentImage();
         InitXYZPointsForRendering();
@@ -624,23 +541,6 @@ void KeyboardCB(int key, int scancode, int action, int mods) {
     case KEY_KP_SUBTRACT:
       if (action == RELEASED) {
         cur_image = cur_image > 0 ? cur_image-1 : 0;
-        loadCurrentImage();
-        InitXYZPointsForRendering();
-      }
-      break;
-    case static_cast<int>('0'):
-      if (action == RELEASED) {
-        cur_image = cur_image + 100;
-        if (cur_image >= im_files[0].size()) {
-          cur_image = im_files[0].size()-1;
-        }
-        loadCurrentImage();
-        InitXYZPointsForRendering();
-      }
-      break;
-    case static_cast<int>('9'):
-      if (action == RELEASED) {
-        cur_image = cur_image >= 100 ? cur_image-100 : 0;
         loadCurrentImage();
         InitXYZPointsForRendering();
       }
@@ -714,47 +614,10 @@ void KeyboardCB(int key, int scancode, int action, int mods) {
         cout << "playback_step = " << playback_step << endl;
       }
       break;
-    case static_cast<int>('z'):
-    case static_cast<int>('Z'): 
-      if (action == RELEASED) {
-        if (icp.getTransforms().size() > 0) {
-          cur_icp_mat = (cur_icp_mat + 1) % icp.getTransforms().size();
-        }
-        std::cout << "cur_icp_mat = " << cur_icp_mat << std::endl;
-      }
-      break;
-    case static_cast<int>('v'):
-    case static_cast<int>('V'): 
-      if (action == RELEASED) {
-        render_correspondances = !render_correspondances;
-        cout << "render_correspondances = " << render_correspondances << endl;
-      }
-      break;
-    case static_cast<int>('x'):
-    case static_cast<int>('X'): 
-      if (action == RELEASED) {
-#ifdef CALIBRATION_RUN
-        render_all_views = !render_all_views;
-        cout << "render_all_views = " << render_all_views << endl;
-#endif
-      }
-      break;
     case static_cast<int>('h'):
     case static_cast<int>('H'):
       if (action == RELEASED) {
         saveCurrentCoeffs();
-      }
-      break;
-    case static_cast<int>('i'):
-    case static_cast<int>('I'):
-      if (action == RELEASED) {
-        if (!shift_down) {
-          cur_kinect = (cur_kinect + 1) % MAX_KINECTS;
-          cout << "cur_kinect = " << cur_kinect << endl;
-        } else {
-          cur_icp_dst_kinect = (cur_icp_dst_kinect + 1) % MAX_KINECTS;
-          cout << "cur_icp_dst_kinect = " << cur_icp_dst_kinect << endl;
-        }
       }
       break;
     case KEY_SPACE:
@@ -795,66 +658,6 @@ void KeyboardCB(int key, int scancode, int action, int mods) {
       if (action == RELEASED) {
         fitFrame(false, true);
       }
-      break;
-    case static_cast<int>('k'):
-    case static_cast<int>('K'):
-#if defined(WIN32) || defined(_WIN32)
-      if (action == RELEASED) {
-        if (shift_down) {
-          repeat = 10;
-        }
-        {  // Closure
-          for (int i = 0; i < repeat; i++) {
-            // We only need to mark the first kinect's file as deleted...
-            std::string full_im_filename = IM_DIR + 
-              (im_files[0][cur_image].first);
-            std::string new_full_im_filename = IM_DIR + string("deleted_") + 
-              string(im_files[0][cur_image].first);
-            r_coeff_file = IM_DIR + string("coeffr_") + im_files[0][cur_image].first;
-            new_r_coeff_file = IM_DIR + string("deleted_coeffr_") + 
-              im_files[0][cur_image].first;
-            l_coeff_file = IM_DIR + string("coeffl_") + im_files[0][cur_image].first;
-            new_l_coeff_file = IM_DIR + string("deleted_coeffl_") + 
-              im_files[0][cur_image].first;
-
-            bool move_OK = (bool)
-              MoveFileW(jtil::string_util::ToWideString(full_im_filename).c_str(), 
-              jtil::string_util::ToWideString(new_full_im_filename).c_str());
-            if (!move_OK) {
-              cout << "Error moving files: " << endl;
-            } else {
-              cout << "Image file marked as deleted sucessfully: " << endl;
-              delete r_hand_coeffs[cur_image]; 
-              delete l_hand_coeffs[cur_image];
-              for (uint32_t i = cur_image; i < im_files[0].size() - 1; i++) {
-                r_hand_coeffs[i] = r_hand_coeffs[i+1];
-                l_hand_coeffs[i] = l_hand_coeffs[i+1];
-              }
-              SAFE_DELETE(im_files[0][cur_image].first); 
-              im_files[0].deleteAtAndShift(cur_image);
-
-              // Coeff file may not exist yet (if we haven't fit it)...
-              move_OK = 
-                MoveFileW(jtil::string_util::ToWideString(r_coeff_file).c_str(), 
-                jtil::string_util::ToWideString(new_r_coeff_file).c_str()) &&
-                MoveFileW(jtil::string_util::ToWideString(l_coeff_file).c_str(), 
-                jtil::string_util::ToWideString(new_l_coeff_file).c_str());
-            }
-            cout << "    - " << full_im_filename.c_str() << " to " << endl;
-            cout << "      " << new_full_im_filename.c_str() << endl;
-            cout << "    - " << r_coeff_file.c_str() << endl;
-            cout << "      " << new_r_coeff_file.c_str() << endl;
-            cout << "    - " << l_coeff_file.c_str() << endl;
-            cout << "      " << new_l_coeff_file.c_str() << endl;
-            cout << endl;
-          }  // for (int i = 0; i < repeat; i++) {
-          loadCurrentImage();
-          InitXYZPointsForRendering();
-        }  // Closure
-      }
-#else
-      cout << "Move function not implemented for Mac OS X" << endl;
-#endif
       break;
   }
 }
@@ -923,8 +726,6 @@ void renderFrame(float dt) {
       Float3::scale(delta_pos, camera_run_mulitiplier);
     }
     render->camera()->moveCamera(&delta_pos);
-    std::cout << "camera position: " << std::endl;
-    render->camera()->eye_pos()->print();
   }
 
   float* cur_coeff;
@@ -951,22 +752,9 @@ void renderFrame(float dt) {
     if (render_depth) {
       for (uint32_t k = 0; k < std::min<uint32_t>(MAX_KINECTS, 
         num_point_clouds_to_render); k++) {
-        if (k == last_icp_kinect && icp.getTransforms().size() > 0) {
-          render->renderColoredPointCloud(geometry_points[k], 
-            &icp.getTransforms()[cur_icp_mat], 
-            point_cloud_scale * 1.5f * static_cast<float>(settings.width) / 4.0f);
-        } else {
-          render->renderColoredPointCloud(geometry_points[k], 
-            &camera_view[k], 
-            point_cloud_scale * 1.5f * static_cast<float>(settings.width) / 4.0f);
-        }
-      }
-      if (render_correspondances) {
-        for (uint32_t k = 0; k < MAX_KINECTS - 1; k++) {
-          if (geometry_lines[k] != NULL) {
-            render->renderColoredLines(geometry_lines[k], &identity, 4.0f);
-          }
-        }
+        render->renderColoredPointCloud(geometry_points[k], 
+          &camera_view[k], 
+          point_cloud_scale * 1.5f * static_cast<float>(settings.width) / 4.0f);
       }
     }
     break;
@@ -1013,7 +801,6 @@ int main(int argc, char *argv[]) {
   cout << "u - Render Point Cloud ON/OFF" << endl;
   cout << "12 - Render output type" << endl;
   cout << "+- - Change the current depth image" << endl;
-  cout << "09 - Change the current depth image x 100" << endl;
   cout << "h - Store hand data to file" << endl;
   cout << "f - Fit model to current frame" << endl;
   cout << "g - Fit model to all remaining frames" << endl;
@@ -1021,16 +808,8 @@ int main(int argc, char *argv[]) {
   cout << "P - Perform targeted zoom" << endl;
   cout << "o - Change playback frame skip" << endl;
   cout << "l - Go to start frame" << endl;
-  cout << "n - Open video stream (playback will save to stream)" << endl;
-  cout << "c - Save calibration data (calibration mode only)" << endl;
-  cout << "x - Render all views (calibration mode only)" << endl;
-  cout << "z - Step through ICP frames (if ICP has been run) (calibration mode only)" << endl;
-  cout << "v - Render Correspondances (if ICP has been run) (calibration mode only)" << endl;
   cout << "j - Query Objective Function Value" << endl;
   cout << "shift+12345 - Copy finger1234/thumb from last frame" << endl;
-  cout << "k - (3 times) delete current file" << endl;
-  cout << "i - Change the current kinect (for ICP to move onto dst)" << endl;
-  cout << "I - Change the current dst kinect" << endl << endl;
   
   try {
     tp = new ThreadPool(NUM_WORKER_THREADS);
@@ -1045,8 +824,6 @@ int main(int argc, char *argv[]) {
     // Fill the settings structure
     settings.width = src_width*2;
     settings.height = src_height*2;
-    //settings.width = 1280;
-    //settings.height = 720;
     settings.fullscreen = false;
     settings.title = string("Hand Fit Project");
     settings.gl_major_version = 3;
@@ -1084,27 +861,34 @@ int main(int argc, char *argv[]) {
       geometry_points[k]->colors()->capacity(src_dim);
       geometry_points[k]->colors()->resize(src_dim);
     }
-    for (uint32_t k = 0; k < MAX_KINECTS-1; k++) {
-      geometry_lines[k] = NULL;
-    }
  
     // Load the Kinect data for fitting from file and process it
-    image_io = new DepthImagesIO();
+    char full_path[256];
     for (uint32_t k = 0; k < MAX_KINECTS; k++) {
-      image_io->GetFilesInDirectory(im_files[k], IM_DIR, k);
-      if (im_files[k].size() == 0) {
-        throw std::runtime_error("ERROR: No frames exist for one of the "
-          "sensors!");
+      snprintf(full_path, 255, "%sdepth_%d_*", IM_DIR.c_str(), k+1);
+      jtil::file_io::ls(full_path, depth_files[k]);
+      snprintf(full_path, 255, "%srgb_%d_*", IM_DIR.c_str(), k+1);
+      jtil::file_io::ls(full_path, rgb_files[k]);
+      if (k > 0) {
+        if (depth_files[k].size() != depth_files[0].size() || 
+            rgb_files[k].size() != rgb_files[0].size()) {
+          throw std::runtime_error("Inconsistent number of frames!");
+        }
       }
-      std::stringstream ss;
-      ss << IM_DIR << "calibration_data" << k << ".bin";
-      if (!fileExists(ss.str())) {
+      if (depth_files[k].size() != rgb_files[k].size()) {
+        throw std::runtime_error("Inconsistent number of frames!");
+      }
+
+      snprintf(full_path, 255, "%scalibration_data%d.bin", CALIB_IM_DIR.c_str(), k);
+      if (!fileExists(full_path)) {
         camera_view[k].identity();
+        std::cout << "**********************************" << std::endl;
+        std::cout << "WARNING: CALIBRATION DATA MISSING!" << std::endl;
+        std::cout << "**********************************" << std::endl;
       } else {
-        LoadArrayFromFile<float>(camera_view[k].m, 16, ss.str());
+        LoadArrayFromFile<float>(camera_view[k].m, 16, full_path);
       }
     }
-    image_io->AlignKinects(im_files, MAX_KINECTS);
 
     cur_depth_data = new int16_t*[MAX_KINECTS];
     cur_label_data = new uint8_t*[MAX_KINECTS];
@@ -1136,10 +920,10 @@ int main(int argc, char *argv[]) {
     }
 
     // Create the optimizer that will fit the models
-    fit = new ModelFit(num_models, num_coeff_fit, num_model_fit_cameras);
+    fit = new ModelFit(num_models, num_coeff_fit, MAX_KINECTS);
 
     Float4x4 old_view, cur_view, camera_view_inv;
-    for (uint32_t k = 0; k < num_model_fit_cameras; k++) {
+    for (uint32_t k = 0; k < MAX_KINECTS; k++) {
       fit->getCameraView(k, old_view);
       Float4x4::inverse(camera_view_inv, camera_view[k]);
       Float4x4::mult(cur_view, old_view, camera_view_inv);
@@ -1147,13 +931,14 @@ int main(int argc, char *argv[]) {
     }
 
     // Load the coeffs from file
-    r_hand_coeffs = new HandModelCoeff*[im_files[0].size()];
-    l_hand_coeffs = new HandModelCoeff*[im_files[0].size()];
-    for (uint32_t i = 0; i < im_files[0].size(); i++) {
-      r_hand_coeffs[i] = new HandModelCoeff(kinect_interface_primesense::hand_net::HandType::RIGHT);
-      r_hand_coeffs[i]->loadFromFile(IM_DIR, string("coeffr_") + im_files[0][i].first);
-      l_hand_coeffs[i] = new HandModelCoeff(kinect_interface_primesense::hand_net::HandType::LEFT);
-      l_hand_coeffs[i]->loadFromFile(IM_DIR, string("coeffl_") + im_files[0][i].first);
+    for (uint32_t i = 0; i < depth_files[0].size(); i++) {
+      r_hand_coeffs.pushBack(new HandModelCoeff(kinect_interface_primesense::hand_net::HandType::RIGHT));
+      snprintf(full_path, 255, "coeffr_%07d.bin", i+1);
+      r_hand_coeffs[i]->loadFromFile(IM_DIR, full_path);
+
+      l_hand_coeffs.pushBack(new HandModelCoeff(kinect_interface_primesense::hand_net::HandType::LEFT));
+      snprintf(full_path, 255, "coeffl_%07d.bin", i+1);
+      l_hand_coeffs[i]->loadFromFile(IM_DIR, full_path);
     }
 
     for (uint32_t i = 0; i < num_models; i++) {
@@ -1170,9 +955,9 @@ int main(int argc, char *argv[]) {
       float dt = static_cast<float>(t1-t0);
 
       if (continuous_fit) {
-        if (cur_image < im_files[0].size() - 1) {
+        if (cur_image < depth_files[0].size() - 1) {
           cout << "fitting frame " << cur_image + 1 << " of ";
-          cout << im_files[0].size() << endl;
+          cout << depth_files[0].size() << endl;
           cur_image++;
           loadCurrentImage();
           fitFrame(true, false);
@@ -1186,7 +971,7 @@ int main(int argc, char *argv[]) {
         }
       }
       if (continuous_play) {
-        if (cur_image < im_files[0].size() - playback_step) {
+        if (cur_image < depth_files[0].size() - playback_step) {
           continuous_play_timer_start += (t1 - t0);
           if (continuous_play_timer_start >= continuous_play_frame_time) {
             cur_image += playback_step;

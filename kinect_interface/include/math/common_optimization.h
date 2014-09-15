@@ -56,17 +56,18 @@ namespace math {
   }
   };
 
+  template <typename T>
   struct SwarmNode {
   public:
     SwarmNode();
     ~SwarmNode();
     void resize(const uint32_t size);
 
-    float* vel;  // num_coeffs
-    float* pos;  // num_coeffs
-    float* best_pos;  // num_coeffs
-    float residue;
-    float best_residue;
+    T* vel;  // num_coeffs
+    T* pos;  // num_coeffs
+    T* best_pos;  // num_coeffs
+    T residue;
+    T best_residue;
   };
 
 };  // namespace math

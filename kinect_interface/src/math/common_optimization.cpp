@@ -10,29 +10,36 @@ using std::endl;
 namespace jtil {
 namespace math {
 
-  SwarmNode::SwarmNode() {
+template <typename T>
+  SwarmNode<T>::SwarmNode() {
     vel = NULL;
     pos = NULL;
     best_pos = NULL;
   }
 
-  SwarmNode::~SwarmNode() {
+  template <typename T>
+  SwarmNode<T>::~SwarmNode() {
     SAFE_DELETE_ARR(vel);
     SAFE_DELETE_ARR(pos);
     SAFE_DELETE_ARR(best_pos);
   }
 
-  void SwarmNode::resize(uint32_t size) {
+  template <typename T>
+  void SwarmNode<T>::resize(uint32_t size) {
     SAFE_DELETE_ARR(vel);
     SAFE_DELETE_ARR(pos);
     SAFE_DELETE_ARR(best_pos);
 
-    vel = new float[size];
-    pos = new float[size];
-    best_pos = new float[size];
-    residue = std::numeric_limits<float>::infinity();
-    best_residue = std::numeric_limits<float>::infinity();
+    vel = new T[size];
+    pos = new T[size];
+    best_pos = new T[size];
+    residue = std::numeric_limits<T>::infinity();
+    best_residue = std::numeric_limits<T>::infinity();
   }
 
 };  // namespace math
 };  // namespace jtil
+
+// Explicit template instantiation
+template struct jtil::math::SwarmNode<float>;
+template struct jtil::math::SwarmNode<double>;

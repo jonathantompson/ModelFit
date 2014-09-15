@@ -27,7 +27,6 @@
     <ClCompile Include="src\math\common_optimization.cpp" />
     <ClCompile Include="src\math\decompose.c" />
     <ClCompile Include="src\math\icp.cpp" />
-    <ClCompile Include="src\math\icp_eigen_data.cpp" />
     <ClCompile Include="src\math\math_base.cpp" />
     <ClCompile Include="src\math\pso.cpp" />
     <ClCompile Include="src\math\pso_parallel.cpp" />
@@ -203,7 +202,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)..\lib\WIN7;$(ProjectDir)..\lib\WIN7\GLFW</AdditionalLibraryDirectories>
-      <AdditionalDependencies>jtil.lib;OpenNI2.lib;glfw3.lib</AdditionalDependencies>
+      <AdditionalDependencies>OpenNI2.lib;glfw3.lib</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalOptions>/ignore:4006 %(AdditionalOptions)</AdditionalOptions>
     </Lib>

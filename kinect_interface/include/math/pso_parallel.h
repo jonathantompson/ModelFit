@@ -82,8 +82,8 @@ namespace math {
     data_str::Vector<float*> tiled_coeffs;  // size = 8 x 8 (default)
     data_str::Vector<float> tiled_residues;  // size = 8 x 8 (default)
 
-    SwarmNode** swarm_;
-    SwarmNode** ordered_swarm_;
+    SwarmNode<float>** swarm_;
+    SwarmNode<float>** ordered_swarm_;
 
     static MERSINE_TWISTER_ENG eng;
     static UNIFORM_REAL_DISTRIBUTION dist_real;
@@ -101,5 +101,5 @@ namespace math {
   };
 
 };  // namespace math
-};  // namespace jtil
+};  // namespace icp
 

@@ -105,9 +105,6 @@
     <ClCompile Include="src\math\icp.cpp">
       <Filter>Source Files\math</Filter>
     </ClCompile>
-    <ClCompile Include="src\math\icp_eigen_data.cpp">
-      <Filter>Source Files\math</Filter>
-    </ClCompile>
     <ClCompile Include="src\data_str\hash_funcs.cpp">
       <Filter>Source Files\data_str</Filter>
     </ClCompile>

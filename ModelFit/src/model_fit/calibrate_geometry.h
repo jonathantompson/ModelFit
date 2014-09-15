@@ -90,7 +90,7 @@ namespace model_fit {
     // camera
     void calcCameraView(const jtil::math::Float4x4& mat_base,
       jtil::math::Float4x4& mat_src, const uint32_t i_base_cam,
-      const uint32_t i_query_cam, const float*** coeffs, 
+      const uint32_t i_query_cam, const jtil::data_str::VectorManaged<float*>* coeffs, 
       const uint32_t cur_frame);
 
     virtual void renderStackReset();

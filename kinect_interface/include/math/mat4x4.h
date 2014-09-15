@@ -47,6 +47,7 @@ namespace math {
     
     // Getter methods
     void print() const;  // Print to std::cout
+    void printPrecise() const;  // Print to std::cout with 8 bits precision
     T operator[](const int i) const {
       return m[i];
     }
@@ -92,6 +93,7 @@ namespace math {
       const T right, const T bottom, const T top);
     void glLookAt(const Vec3<T>& up, const Vec3<T>& forward,
       const Vec3<T>& pos);
+    T frobeniusNorm();
     
     // Static Math operations
     static T det(const Mat4x4& a);
@@ -135,6 +137,7 @@ namespace math {
       const T y_angle, const T z_angle);
     static void rotMat2Euler(T& x_angle, T& y_angle, T& z_angle, 
       const Mat4x4& a);
+    static T frobeniusNorm(const Mat4x4& a);
     
     T m[16];  // Not private --> Avoid some overhead with getter setter methods
     char pad[ALIGNMENT - ((16*sizeof(T)) % ALIGNMENT)];
@@ -259,6 +262,23 @@ namespace math {
     printf("| %+.4e  %+.4e  %+.4e  %+.4e |\n", m[1],  m[5],  m[9],  m[13]);
     printf("| %+.4e  %+.4e  %+.4e  %+.4e |\n", m[2],  m[6],  m[10], m[14]);
     printf("| %+.4e  %+.4e  %+.4e  %+.4e |\n", m[3],  m[7],  m[11], m[15]);
+#endif
+  };
+
+  // Getter methods
+  template <class T>
+  void Mat4x4<T>::printPrecise() const {
+#ifdef ROW_MAJOR
+    printf("| %+.8e  %+.8e  %+.8e  %+.8e |\n", m[0],  m[1],  m[2],  m[3]);
+    printf("| %+.8e  %+.8e  %+.8e  %+.8e |\n", m[4],  m[5],  m[6],  m[7]);
+    printf("| %+.8e  %+.8e  %+.8e  %+.8e |\n", m[8],  m[9],  m[10], m[11]);
+    printf("| %+.8e  %+.8e  %+.8e  %+.8e |\n", m[12], m[13], m[14], m[15]);
+#endif
+#ifdef COLUMN_MAJOR
+    printf("| %+.8e  %+.8e  %+.8e  %+.8e |\n", m[0],  m[4],  m[8],  m[12]);
+    printf("| %+.8e  %+.8e  %+.8e  %+.8e |\n", m[1],  m[5],  m[9],  m[13]);
+    printf("| %+.8e  %+.8e  %+.8e  %+.8e |\n", m[2],  m[6],  m[10], m[14]);
+    printf("| %+.8e  %+.8e  %+.8e  %+.8e |\n", m[3],  m[7],  m[11], m[15]);
 #endif
   };
   
@@ -1787,6 +1807,20 @@ namespace math {
     z_angle = atan2(-a.m[6],a.m[5]);
     y_angle = asin(a.m[4]);
 #endif
+  }
+
+  template <class T>
+  T Mat4x4<T>::frobeniusNorm(const Mat4x4<T>& a) {
+    T accum = 0;
+    for (uint32_t i = 0; i < 16; i++) {
+      accum += a.m[i] * a.m[i];
+    }
+    return sqrt(accum);
+  }
+
+  template <class T>
+  T Mat4x4<T>::frobeniusNorm() {
+    return Mat4x4<T>::frobeniusNorm(*this);
   }
   
 };  // namespace math

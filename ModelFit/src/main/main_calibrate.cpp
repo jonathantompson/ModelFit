@@ -56,7 +56,6 @@
 
 // Some hard coded settings
 #define FILTER_SIZE 10  
-#define CALIBRATION_MAX_FILES 100
 #define ICP_PC_MODEL_DIST_THRESH 15  // mm
 #define ICP_USE_POINTS_NEAR_MODEL false
 #define ICP_NUM_ITERATIONS 100
@@ -74,9 +73,6 @@
   #error "HAND_FIT is not defined in the preprocessor definitions!"
 #endif
 
-const bool fit_left = false;
-const bool fit_right = true; 
-
 using namespace std;
 using namespace jtil::math;
 using namespace jtil::data_str;
@@ -93,7 +89,6 @@ double t1, t0;
 // The main window and basic rendering system
 Window* wnd = NULL;
 Renderer* render = NULL;
-bool rotate_light = false;
 int render_output = 1;  // 1 - color, 
                         // 2 - synthetic depth, 
 
@@ -115,7 +110,6 @@ Float4x4 camera_view[MAX_KINECTS];
 PoseModel** models;
 int cur_kinect = 0;
 int cur_icp_dst_kinect = 0;
-uint32_t cur_icp_mat = 0;
 int32_t last_icp_kinect = -1;
 bool render_correspondances = true;
 CalibrateGeometryType cal_type = CalibrateGeometryType::ICOSAHEDRON; 
@@ -124,11 +118,11 @@ const uint32_t num_models = 1;
 const uint32_t num_coeff = CalibrateCoeff::NUM_PARAMETERS;
 const uint32_t num_coeff_fit = CAL_GEOM_NUM_COEFF;
 bool render_all_views = 0;
-jtil::data_str::VectorManaged<char*> depth_files[MAX_KINECTS];
-jtil::data_str::VectorManaged<char*> rgb_files[MAX_KINECTS];
+jtil::data_str::VectorManaged<char*> depth_files[MAX_KINECTS];  // [kinect][frame]
+jtil::data_str::VectorManaged<char*> rgb_files[MAX_KINECTS];  // [kinect][frame]
 jtil::data_str::VectorManaged<int16_t*> depth_database[MAX_KINECTS];  // [kinect][frame][pix]
 jtil::data_str::VectorManaged<uint8_t*> rgb_database[MAX_KINECTS];
-jtil::data_str::VectorManaged<float*> coeffs[MAX_KINECTS];  // [frame][coeff]
+jtil::data_str::VectorManaged<float*> coeffs[MAX_KINECTS];  // [kinect][frame][coeff]
 uint32_t num_model_fit_cameras = 1;
 uint32_t cur_coeff = 0;
 ModelFit* fit = NULL;
@@ -140,7 +134,6 @@ float** coeff = NULL;  // Temp space only used when performing fit
 float** prev_coeff = NULL; 
 
 // Kinect Image data 
-Vector<char*> im_files[MAX_KINECTS];  // filename
 float cur_xyz_data[MAX_KINECTS][src_dim*3];
 float cur_norm_data[MAX_KINECTS][src_dim*3];
 float cur_uvd_data[MAX_KINECTS][src_dim*3];
@@ -150,10 +143,6 @@ uint8_t cur_image_rgb[MAX_KINECTS][src_dim*3];
 uint32_t cur_image = 0;
 GeometryColoredPoints* geometry_points[MAX_KINECTS];
 GeometryColoredLines* geometry_lines[MAX_KINECTS-1];  // For displaying ICP correspondances
-float temp_xyz[3 * src_dim];
-float temp_rgb[3 * src_dim];
-bool render_depth = true;
-int playback_step = 1;
 OpenNIFuncs openni_funcs;
 Texture* tex = NULL;
 uint8_t tex_data[src_dim * 3];
@@ -162,7 +151,7 @@ const float point_cloud_scale = 4.0f;
 const uint32_t num_point_clouds_to_render = 1;
 
 // ICP
-jtil::math::ICP icp;
+jtil::math::ICP<float> icp;
 
 // Multithreading
 ThreadPool* tp;
@@ -201,7 +190,7 @@ void loadCurrentImage(bool print_to_screen = true) {
     for (int32_t i = 0; i < src_dim; i++) {
       uint32_t filt = 0;
       for (int32_t f = (int32_t)cur_image; f < (int32_t)cur_image + FILTER_SIZE && 
-        f < (int32_t)im_files[k].size(); f++, filt++) {
+        f < (int32_t)depth_database[k].size(); f++, filt++) {
         cur_depth[filt] = depth_database[k][f][i];
       }
       // Now calculate the std and mean of the non-zero entries
@@ -280,7 +269,6 @@ void InitXYZPointsForRendering() {
   }
 }
 
-
 void saveCurrentCoeffs() {
   // Save all kinect coeffs in the same file
   char full_path[256];
@@ -331,8 +319,6 @@ void MousePosCB(double x, double y) {
     float theta_x = dx * mouse_speed_rotation;
     float theta_y = dy * mouse_speed_rotation;
     render->camera()->rotateCamera(theta_x, theta_y);
-    std::cout << "rot = " << std::endl;
-    render->camera()->eye_rot()->print();
   }
   if (scale_coeff) {
     int dy = mouse_y - mouse_y_prev;
@@ -451,38 +437,21 @@ void KeyboardCB(int key, int scancode, int action, int mods) {
         cur_dir[1] += 1;
       }
       break;
-    case static_cast<int>('r'):
-    case static_cast<int>('R'):
-      if (action == RELEASED) {
-        rotate_light = !rotate_light;
-      }
-      break;
     case static_cast<int>('t'):
     case static_cast<int>('T'):
       if (action == RELEASED) {
         render->wireframe = !render->wireframe;
       }
       break;
-    case static_cast<int>('b'):
-    case static_cast<int>('B'):
-      if (action == RELEASED) {
-        render->render_bounding_spheres = !render->render_bounding_spheres;
-      }
-      break;
     case static_cast<int>('1'):
     case static_cast<int>('2'):
-    case static_cast<int>('3'):
-    case static_cast<int>('4'):
-    case static_cast<int>('5'):
-    case static_cast<int>('6'):
-    case static_cast<int>('7'):
       if (action == RELEASED && !shift_down) {
         render_output = key - static_cast<int>('1') + 1;
       }
       break;
     case KEY_KP_ADD:
       if (action == RELEASED) {
-        cur_image = cur_image < static_cast<uint32_t>(im_files[0].size())-1 ? 
+        cur_image = cur_image < static_cast<uint32_t>(depth_database[0].size())-1 ? 
           cur_image+1 : cur_image;
         loadCurrentImage();
         InitXYZPointsForRendering();
@@ -491,23 +460,6 @@ void KeyboardCB(int key, int scancode, int action, int mods) {
     case KEY_KP_SUBTRACT:
       if (action == RELEASED) {
         cur_image = cur_image > 0 ? cur_image-1 : 0;
-        loadCurrentImage();
-        InitXYZPointsForRendering();
-      }
-      break;
-    case static_cast<int>('0'):
-      if (action == RELEASED) {
-        cur_image = cur_image + 100;
-        if (cur_image >= im_files[0].size()) {
-          cur_image = im_files[0].size()-1;
-        }
-        loadCurrentImage();
-        InitXYZPointsForRendering();
-      }
-      break;
-    case static_cast<int>('9'):
-      if (action == RELEASED) {
-        cur_image = cur_image >= 100 ? cur_image-100 : 0;
         loadCurrentImage();
         InitXYZPointsForRendering();
       }
@@ -557,14 +509,6 @@ void KeyboardCB(int key, int scancode, int action, int mods) {
         cur_image = 0;
         loadCurrentImage();
         InitXYZPointsForRendering();
-      }
-      break;
-    case static_cast<int>('o'):
-    case static_cast<int>('O'): 
-      if (action == RELEASED) {
-        playback_step = playback_step + 1;
-        playback_step = playback_step == 11 ? 1 : playback_step;
-        cout << "playback_step = " << playback_step << endl;
       }
       break;
     case static_cast<int>('c'):
@@ -695,7 +639,7 @@ void KeyboardCB(int key, int scancode, int action, int mods) {
         // Approximate the camera by using the fitted model coeffs
         ((CalibrateGeometry*)models[0])->calcCameraView(
           camera_view[k_dst], camera_view[k_src], k_dst, k_src, 
-          (const float***)&coeffs[0], cur_image);
+          coeffs, cur_image);
 
         // Now perform ICP for a tight fit
         icp.num_iterations = ICP_NUM_ITERATIONS;
@@ -732,16 +676,6 @@ void KeyboardCB(int key, int scancode, int action, int mods) {
         SaveArrayToFile<float>(camera_view[k_src].m, 16, ss.str());
         std::cout << "Calibration data saved to " << ss.str() << endl;
         last_icp_kinect = k_src;
-        cur_icp_mat = icp.getTransforms().size() - 1;
-      }
-      break;
-    case static_cast<int>('z'):
-    case static_cast<int>('Z'): 
-      if (action == RELEASED) {
-        if (icp.getTransforms().size() > 0) {
-          cur_icp_mat = (cur_icp_mat + 1) % icp.getTransforms().size();
-        }
-        std::cout << "cur_icp_mat = " << cur_icp_mat << std::endl;
       }
       break;
     case static_cast<int>('v'):
@@ -785,12 +719,6 @@ void KeyboardCB(int key, int scancode, int action, int mods) {
         }
       }
       break;
-    case static_cast<int>('u'):
-    case static_cast<int>('U'):
-      if (action == RELEASED) {
-        render_depth = !render_depth;
-      }
-      break;
     case static_cast<int>('j'):
     case static_cast<int>('J'):
       if (action == RELEASED) {
@@ -818,15 +746,6 @@ void fitFrame(bool seed_with_last_frame, bool query_only) {
 }
 
 void renderFrame(float dt) {
-  if (rotate_light) {
-    renderer::LightDir* light = render->light_dir();
-    Float3* dir = light->direction_world();
-    Float4x4::rotateMatYAxis(mat_tmp, dt);
-    Float3 new_dir;
-    Float3::affineTransformVec(new_dir, mat_tmp, *dir);
-    dir->set(new_dir);
-  }
-
   // Move the camera
   delta_pos.set(cur_dir);
   const Float3 zeros(0, 0, 0);
@@ -837,8 +756,6 @@ void renderFrame(float dt) {
       Float3::scale(delta_pos, camera_run_mulitiplier);
     }
     render->camera()->moveCamera(&delta_pos);
-    std::cout << "camera position: " << std::endl;
-    render->camera()->eye_pos()->print();
   }
 
   if (!render_all_views) {
@@ -853,7 +770,7 @@ void renderFrame(float dt) {
   switch (render_output) {
   case 1:
     render->renderFrame(dt);
-    if (render_depth) {
+    {
       if (!render_all_views) {
         render->renderColoredPointCloud(geometry_points[cur_kinect], 
           &identity, 1.5f * static_cast<float>(settings.width) / 4.0f);
@@ -861,7 +778,7 @@ void renderFrame(float dt) {
         for (uint32_t k = 0; k < MAX_KINECTS; k++) {
           if (k == last_icp_kinect && icp.getTransforms().size() > 0) {
             render->renderColoredPointCloud(geometry_points[k], 
-              &icp.getTransforms()[cur_icp_mat], 
+              &icp.getTransforms()[icp.getTransforms().size()-1], 
               point_cloud_scale * 1.5f * static_cast<float>(settings.width) / 4.0f);
           } else {
             render->renderColoredPointCloud(geometry_points[k], 
@@ -907,26 +824,18 @@ int main(int argc, char *argv[]) {
   cout << "mouse left click + drag - Rotate camera" << endl;
   cout << "space - Change hand to control" << endl;
   cout << "mouse right click + drag - Adjust coefficient" << endl;
-  cout << "[] - Change adjustment coeff" << endl;
-  cout << "r - rotate light" << endl;
+  cout << "[,] - Change the current coeff to adjust" << endl;
   cout << "t - wireframe rendering" << endl;
-  cout << "b - bounding sphere rendering" << endl;
   cout << "y - Render Hands ON/OFF" << endl;
-  cout << "u - Render Point Cloud ON/OFF" << endl;
-  cout << "12 - Render output type" << endl;
-  cout << "+- - Change the current depth image" << endl;
-  cout << "09 - Change the current depth image x 100" << endl;
-  cout << "h - Store hand data to file" << endl;
+  cout << "1,2 - Render output type" << endl;
+  cout << "+,- - Change the current depth image" << endl;
+  cout << "h - Store model coefficient data to file" << endl;
   cout << "f - Fit model to current frame" << endl;
   cout << "g - Fit model to all remaining frames" << endl;
   cout << "p - Playback frames (@15fps)" << endl;
-  cout << "P - Perform targeted zoom" << endl;
-  cout << "o - Change playback frame skip" << endl;
   cout << "l - Go to start frame" << endl;
-  cout << "n - Open video stream (playback will save to stream)" << endl;
   cout << "c - Save calibration data" << endl;
   cout << "x - Render all views" << endl;
-  cout << "z - Step through ICP frames (if ICP has been run)" << endl;
   cout << "v - Render Correspondances (if ICP has been run)" << endl;
   cout << "j - Query Objective Function Value" << endl;
   cout << "shift+12345 - Copy finger1234/thumb from last frame" << endl;
@@ -1009,23 +918,23 @@ int main(int argc, char *argv[]) {
     // Load in all the images from file.  We do this for calibration data since
     // there wont be that many frames and because we need access to all the
     // point clouds to average them anyway.
-    uint8_t* rgb_tmp = new uint8_t[src_dim * 3];
     for (uint32_t k = 0; k < MAX_KINECTS; k++) {
       for (uint32_t f = 0; f < rgb_files[k].size(); f++) {
-        uint32_t w, h, nchan;
         // Load in the RGB
-        uint8_t* cur_rgb = new uint8_t[src_dim*3];
+        uint32_t w, h, nchan;
+        uint8_t* cur_rgb = NULL;
         snprintf(full_path, 255, "%s%s", IM_DIR.c_str(), rgb_files[k][f]);
         renderer::Texture::loadImFromFile(full_path, cur_rgb, w, h, nchan);
-        if (w != src_width || h != src_height || nchan != 3) {
+        if (!cur_rgb || w != src_width || h != src_height || nchan != 3) {
           throw std::runtime_error("Data might be corrupted!");
         }
         rgb_database[k].pushBack(cur_rgb);
 
         // Load in the depth
+        uint8_t* rgb_tmp = NULL;
         snprintf(full_path, 255, "%s%s", IM_DIR.c_str(), depth_files[k][f]);
         renderer::Texture::loadImFromFile(full_path, rgb_tmp, w, h, nchan);
-        if (w != src_width || h != src_height || nchan != 3) {
+        if (!rgb_tmp || w != src_width || h != src_height || nchan != 3) {
           throw std::runtime_error("Data might be corrupted!");
         }
         // Unpack the depth (the MSB is in the green and the LSB in the red)
@@ -1036,9 +945,9 @@ int main(int argc, char *argv[]) {
           cur_depth[i] = (((int16_t)g) << 8) | (int16_t)b;
         }
         depth_database[k].pushBack(cur_depth);
+        delete[] rgb_tmp;
       }
     }
-    delete[] rgb_tmp;
 
     loadCurrentImage();
   
@@ -1098,9 +1007,9 @@ int main(int argc, char *argv[]) {
       float dt = static_cast<float>(t1-t0);
 
       if (continuous_fit) {
-        if (cur_image < im_files[0].size() - 1) {
+        if (cur_image < depth_database[0].size() - 1) {
           cout << "fitting frame " << cur_image + 1 << " of ";
-          cout << im_files[0].size() << endl;
+          cout << depth_database[0].size() << endl;
           cur_image++;
           loadCurrentImage();
           fitFrame(true, false);
@@ -1114,10 +1023,10 @@ int main(int argc, char *argv[]) {
         }
       }
       if (continuous_play) {
-        if (cur_image < im_files[0].size() - playback_step) {
+        if (cur_image < depth_database[0].size() - 1) {
           continuous_play_timer_start += (t1 - t0);
           if (continuous_play_timer_start >= continuous_play_frame_time) {
-            cur_image += playback_step;
+            cur_image ++;
             loadCurrentImage(false);
             continuous_play_timer_start = 0;
             InitXYZPointsForRendering();

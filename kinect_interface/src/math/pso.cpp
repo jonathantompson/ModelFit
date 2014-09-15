@@ -14,10 +14,11 @@ using std::runtime_error;
 namespace jtil {
 namespace math {
 
-  MERSINE_TWISTER_ENG PSO::eng;
-  UNIFORM_REAL_DISTRIBUTION PSO::dist_real(0, 1);
+  template <typename T> MERSINE_TWISTER_ENG PSO<T>::eng;
+  template <typename T> std::tr1::uniform_real_distribution<T> PSO<T>::dist_real(0, 1);
 
-  PSO::PSO(const uint32_t num_coeffs, const int swarm_size) {
+  template <typename T>
+  PSO<T>::PSO(const uint32_t num_coeffs, const int swarm_size) {
     num_coeffs_ = num_coeffs;
     if (swarm_size > 0) {
       swarm_size_ = static_cast<uint32_t>(swarm_size);
@@ -25,31 +26,32 @@ namespace math {
       swarm_size_ = 30;  // Recommended by "An Off-The-Shelf PSO"
     }
 
-    best_pos_global_ = new float[num_coeffs_];
-    c_lo_ = new float[num_coeffs_];
-    c_hi_ = new float[num_coeffs_];
-    cur_c_min_ = new float[num_coeffs_];
-    cur_c_max_ = new float[num_coeffs_];
-    delta_c_ = new float[num_coeffs_];
-    vel_max_ = new float[num_coeffs_];
+    best_pos_global_ = new T[num_coeffs_];
+    c_lo_ = new T[num_coeffs_];
+    c_hi_ = new T[num_coeffs_];
+    cur_c_min_ = new T[num_coeffs_];
+    cur_c_max_ = new T[num_coeffs_];
+    delta_c_ = new T[num_coeffs_];
+    vel_max_ = new T[num_coeffs_];
 
     // Allocate space for the N+1 probe points
-    swarm_ = new SwarmNode*[swarm_size_];
+    swarm_ = new SwarmNode<T>*[swarm_size_];
     for (uint32_t i = 0; i < swarm_size_; i++) {
-      swarm_[i] = new SwarmNode();
+      swarm_[i] = new SwarmNode<T>();
       swarm_[i]->resize(num_coeffs_);
     }
 
     // Some default parameters
     max_iterations = 1000;
-    delta_coeff_termination = 1e-8f;
-    phi_p = 2.8f;  // Recommended by "An Off-The-Shelf PSO"
-    phi_g = 1.3f;  // Recommended by "An Off-The-Shelf PSO"
+    delta_coeff_termination = (T)1e-8;
+    phi_p = (T)2.8;  // Recommended by "An Off-The-Shelf PSO"
+    phi_g = (T)1.3;  // Recommended by "An Off-The-Shelf PSO"
 
     verbose = false;
   }
 
-  PSO::~PSO() {
+  template <typename T>
+  PSO<T>::~PSO() {
     if (swarm_) {
       for (uint32_t i = 0; i < swarm_size_; i++) {
         SAFE_DELETE(swarm_[i]);
@@ -65,10 +67,11 @@ namespace math {
     SAFE_DELETE_ARR(swarm_);
   }
 
-  void PSO::minimize(float* end_c, const float* start_c,
-    const float* radius_c, const bool* angle_coeff, 
-    const ObjectiveFuncPtr obj_func, 
-    const CoeffUpdateFuncPtr coeff_update_func) {
+  template <typename T>
+  void PSO<T>::minimize(T* end_c, const T* start_c,
+    const T* radius_c, const bool* angle_coeff, 
+    T (*obj_func)(const T* coeff), 
+    void (*coeff_update_func)(T* coeff)) {
 
     eng.seed();
     if (verbose) {
@@ -77,7 +80,7 @@ namespace math {
 
     // Initialize all random swarm particles to Uniform(c_lo_, c_hi_)
     for (uint32_t i = 0; i < num_coeffs_; i++) {
-      float rad = fabsf(radius_c[i]);
+      T rad = fabs(radius_c[i]);
       c_lo_[i] = start_c[i] - rad;
       c_hi_[i] = start_c[i] + rad;
       // According to paper (forgot title), 0.5x search space
@@ -91,16 +94,16 @@ namespace math {
 
     // Stochasticly sample for the other particles
     for (uint32_t j = 0; j < num_coeffs_; j++) {
-      UNIFORM_REAL_DISTRIBUTION c_dist(c_lo_[j], c_hi_[j]);
+      std::tr1::uniform_real_distribution<T> c_dist(c_lo_[j], c_hi_[j]);
       for (uint32_t i = 1; i < swarm_size_; i++) {
-        float uniform_rand_num = c_dist(eng);  // [c_lo_, c_hi_)
+        T uniform_rand_num = c_dist(eng);  // [c_lo_, c_hi_)
         swarm_[i]->pos[j] = uniform_rand_num;
       }
     }
 
     // evaluate the agent's function values, calculate residue and set the best
     // position and residue for the particle x_i as it's starting position
-    best_residue_global_ = std::numeric_limits<float>::infinity();
+    best_residue_global_ = std::numeric_limits<T>::infinity();
     for (uint32_t i = 0; i < swarm_size_; i++) {
       if (coeff_update_func) {
         coeff_update_func(swarm_[i]->pos);
@@ -116,19 +119,19 @@ namespace math {
 
     // Initialize random velocity to Uniform(-2*radius_c, 2*radius_c)
     for (uint32_t j = 0; j < num_coeffs_; j++) {
-      UNIFORM_REAL_DISTRIBUTION c_dist(-2 * fabsf(radius_c[j]),
-        2 * fabsf(radius_c[j]));
+      std::tr1::uniform_real_distribution<T> c_dist(-2 * fabs(radius_c[j]),
+        2 * fabs(radius_c[j]));
       for (uint32_t i = 0; i < swarm_size_; i++) {
-        float uniform_rand_num = c_dist(eng);  // [-2*radius_c, 2*radius_c)
+        T uniform_rand_num = c_dist(eng);  // [-2*radius_c, 2*radius_c)
         swarm_[i]->vel[j] = uniform_rand_num;
       }
     }
 
-    float phi = phi_p + phi_g;
+    T phi = phi_p + phi_g;
     if (phi <= 4) {
       throw std::runtime_error("ERROR: kappa_ = phi_p + phi_g <= 4!");
     }
-    kappa_ = 2.0f / fabsf(2.0f - phi - sqrtf(phi * phi - 4 * phi));
+    kappa_ = (T)2.0 / fabs((T)2.0 - phi - sqrt(phi * phi - (T)4 * phi));
 
     if (verbose) {
       cout << "Iteration 0:" << endl;
@@ -142,15 +145,15 @@ namespace math {
     }
 
     uint64_t num_iterations = 0;
-    float delta_coeff = std::numeric_limits<float>::infinity();
+    T delta_coeff = std::numeric_limits<T>::infinity();
     do {
       // For each particle, i in the swarm:
       for (uint32_t i = 0; i < swarm_size_; i++) {
-        SwarmNode* cur_node = swarm_[i];
+        SwarmNode<T>* cur_node = swarm_[i];
         // For each dimension d:
         for (uint32_t d = 0; d < num_coeffs_; d++) {
-          float r_p = dist_real(eng);  // [0,1)
-          float r_g = dist_real(eng);  // [0,1)
+          T r_p = dist_real(eng);  // [0,1)
+          T r_g = dist_real(eng);  // [0,1)
           // Update the velocity
           cur_node->vel[d] = kappa_ * (cur_node->vel[d] + 
             (phi_p * r_p * (cur_node->best_pos[d] - cur_node->pos[d])) + 
@@ -191,21 +194,21 @@ namespace math {
 
       // Calculate the spread in coefficients
       if (delta_coeff_termination > 0) {
-        float l2_norm = 0.0f;
+        T l2_norm = 0;
         for (uint32_t j = 0; j < num_coeffs_; j++) {
-          cur_c_min_[j] = std::numeric_limits<float>::infinity();
-          cur_c_max_[j] = -std::numeric_limits<float>::infinity();
+          cur_c_min_[j] = std::numeric_limits<T>::infinity();
+          cur_c_max_[j] = -std::numeric_limits<T>::infinity();
           for (uint32_t i = 0; i < swarm_size_; i++) {
-            cur_c_min_[j] = std::min<float>(cur_c_min_[j], swarm_[i]->pos[j]);
-            cur_c_max_[j] = std::max<float>(cur_c_max_[j], swarm_[i]->pos[j]);
+            cur_c_min_[j] = std::min<T>(cur_c_min_[j], swarm_[i]->pos[j]);
+            cur_c_max_[j] = std::max<T>(cur_c_max_[j], swarm_[i]->pos[j]);
           }
           delta_c_[j] = cur_c_max_[j] - cur_c_min_[j];
           l2_norm += delta_c_[j] * delta_c_[j];
         }
-        l2_norm = sqrtf(l2_norm);
+        l2_norm = sqrt(l2_norm);
         delta_coeff = l2_norm;
       } else {
-        delta_coeff = std::numeric_limits<float>::infinity();
+        delta_coeff = std::numeric_limits<T>::infinity();
       }
 
       if (verbose) {
@@ -226,18 +229,19 @@ namespace math {
   
   // interpolateCoeff performs the following:
   // ret = a + interp_val * (b - c)
-  float PSO::interpolateCoeff(const float a, const float interp_val, 
-    const float b, const float c, bool angle) {
-    float interp;
+  template <typename T>
+  T PSO<T>::interpolateCoeff(const T a, const T interp_val, 
+    const T b, const T c, bool angle) {
+    T interp;
     if (angle) {
-      float real_a = cos(a);
-      float imag_a = sin(a);
-      float real_b = cos(b);
-      float imag_b = sin(b);
-      float real_c = cos(c);
-      float imag_c = sin(c);
-      float real_interp = real_a + interp_val * (real_b - real_c);
-      float imag_interp = imag_a + interp_val * (imag_b - imag_c);
+      T real_a = cos(a);
+      T imag_a = sin(a);
+      T real_b = cos(b);
+      T imag_b = sin(b);
+      T real_c = cos(c);
+      T imag_c = sin(c);
+      T real_interp = real_a + interp_val * (real_b - real_c);
+      T imag_interp = imag_a + interp_val * (imag_b - imag_c);
       interp = atan2(imag_interp, real_interp);
     } else {
       interp = a + interp_val * (b - c);
@@ -246,4 +250,8 @@ namespace math {
   }
 
 };  // namespace math
-};  // namespace jtil
+};  // namespace icp
+
+// Explicit template instantiation
+template class jtil::math::PSO<float>;
+template class jtil::math::PSO<double>;
