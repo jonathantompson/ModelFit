@@ -9,6 +9,8 @@
 
 #define SAFE_DELETE(x) if (x != NULL) { delete x; x = NULL; }
 #define SAFE_DELETE_ARR(x) if (x != NULL) { delete[] x; x = NULL; }
+#define FALSE 0
+#define TRUE 1
 
 using std::cout;
 using std::endl;

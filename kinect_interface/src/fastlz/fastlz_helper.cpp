@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <stdlib.h>
 #include <stdexcept>
 #include "fastlz/fastlz_helper.h"

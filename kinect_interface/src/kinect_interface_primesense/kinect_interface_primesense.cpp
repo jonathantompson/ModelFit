@@ -14,9 +14,39 @@
 #include "threading/thread.h"
 #include "threading/thread_pool.h"
 
+#ifdef ADD_OPEN_NI_DEPENDANCY
+
 #include "OpenNI.h"
 #include "OniCAPI.h"
 #include "PS1080.h"
+
+#else
+
+namespace openni {
+
+// From OniEnums.h
+typedef enum
+{
+	// Depth
+	PIXEL_FORMAT_DEPTH_1_MM = 100,
+	PIXEL_FORMAT_DEPTH_100_UM = 101,
+	PIXEL_FORMAT_SHIFT_9_2 = 102,
+	PIXEL_FORMAT_SHIFT_9_3 = 103,
+
+	// Color
+	PIXEL_FORMAT_RGB888 = 200,
+	PIXEL_FORMAT_YUV422 = 201,
+	PIXEL_FORMAT_GRAY8 = 202,
+	PIXEL_FORMAT_GRAY16 = 203,
+	PIXEL_FORMAT_JPEG = 204,
+} PixelFormat;
+
+// From OpenNI.h
+typedef uint16_t DepthPixel;
+
+}  // namespace openni
+
+#endif
 
 #define SAFE_DELETE(x) if (x != NULL) { delete x; x = NULL; }
 #define SAFE_DELETE_ARR(x) if (x != NULL) { delete[] x; x = NULL; }
@@ -41,6 +71,8 @@ using openni::PixelFormat;
 using openni::DepthPixel;
 
 namespace kinect_interface_primesense {
+
+#ifdef ADD_OPEN_NI_DEPENDANCY
 
   bool KinectInterfacePrimesense::openni_init_ = false;
   std::mutex KinectInterfacePrimesense::openni_static_lock_;
@@ -786,6 +818,8 @@ namespace kinect_interface_primesense {
     cout << "kinectUpdateThread shutdown requested..." << endl;
     kinect_thread_.join();
   }
+
+#endif  // #ifdef ADD_OPEN_NI_DEPENDANCY
 
 }  // namespace kinect_interface_primesense
 

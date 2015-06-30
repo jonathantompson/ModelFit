@@ -5,6 +5,9 @@
 #include "kinect_interface_primesense/kinect_interface_primesense.h"
 
 namespace kinect_interface_primesense {
+
+#ifdef ADD_OPEN_NI_DEPENDANCY
+
   void KinectDeviceListener::onDeviceStateChanged(
     const openni::DeviceInfo* pInfo, openni::DeviceState errorState) {
     std::string uri = pInfo->getUri();
@@ -43,6 +46,8 @@ namespace kinect_interface_primesense {
   KinectDeviceListener::~KinectDeviceListener() {
 
   }
+
+#endif
 
 }  // namespace kinect_interface_primesense
 

@@ -46,6 +46,9 @@ namespace kinect_interface_primesense {
   class OpenNIFuncs;
   class KinectDeviceListener;
 
+#ifdef ADD_OPEN_NI_DEPENDANCY
+  // Only define the class if we're going to pull in the entire OpenNI API
+
   class KinectInterfacePrimesense {
   public:
     friend class KinectDeviceListener;
@@ -154,6 +157,8 @@ namespace kinect_interface_primesense {
     void executeThreadCallbacks(jtil::threading::ThreadPool* tp, 
     jtil::data_str::VectorManaged<jtil::threading::Callback<void>*>& cbs);
   };
+
+#endif
   
 #ifndef EPSILON
   #define EPSILON 0.000001f

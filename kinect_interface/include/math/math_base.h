@@ -8,9 +8,7 @@
 
 #pragma once
 
-#ifdef __APPLE__
-  #include <algorithm>
-#endif
+#include <algorithm>
 #include <stdexcept>
 #include <string>
 #include "math/math_types.h"

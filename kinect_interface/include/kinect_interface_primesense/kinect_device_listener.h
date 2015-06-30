@@ -1,8 +1,10 @@
 //
 //  kinect_device_listener.h
 // 
-
 #pragma once
+
+#ifdef ADD_OPEN_NI_DEPENDANCY
+// Only define the class if we're going to pull in the entire OpenNI API
 
 #include "OpenNI.h"
 		
@@ -21,3 +23,5 @@ namespace kinect_interface_primesense {
   };
 
 };  // namespace kinect_interface_primesense
+
+#endif
