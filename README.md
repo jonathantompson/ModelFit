@@ -51,7 +51,7 @@ Part 2
 **Compilation and Running**
 ---------------
 
-I have baked in the pre-compiled dependencies for Win 7/8/8.1 64bit + Visual Studio 2012 (which is the only OS and compiler supported anyway).  You need to unzip the lib files in ```ModelFit\lib\WIN7.zip```.
+I have baked in the pre-compiled dependencies for Win 7/8/8.1 64bit + Visual Studio 2012 (which is the only OS and compiler supported anyway). You need to unzip the lib files in: ```ModelFit\lib\WIN7.zip```.  The dependancies are all cross platform (linux, windows and OS X):  [assimp](http://assimp.sourceforge.net/), [freeimage](http://freeimage.sourceforge.net/), [glfw](http://www.glfw.org/), [zeromq](http://zeromq.org/) if you want to pre-compile them from scratch for a different platform.
 
 After unzipping ```WIN7.zip```, ```ModelFit.sln``` should compile and run.
 
