@@ -9,6 +9,8 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include "data_str/vector.h"
+#include "data_str/vector_managed.h"
 #include "math/math_types.h"
 
 namespace kinect_interface_primesense {
@@ -24,5 +26,11 @@ namespace kinect_interface_primesense {
     int32_t im_height;
     char** filenames;
   };
+
+  void GetDataFileNames(const uint32_t max_kinects, const char* im_dir, 
+    const char* calib_im_dir,
+    jtil::data_str::VectorManaged<char*>* depth_files, 
+    jtil::data_str::VectorManaged<char*>* rgb_files,
+    jtil::math::Float4x4* camera_view);
 
 };  // namespace kinect_interface_primesense

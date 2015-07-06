@@ -37,6 +37,7 @@
 #include "model_fit/model_fit.h"
 #include "kinect_interface_primesense/hand_model_coeff.h"
 #include "kinect_interface_primesense/open_ni_funcs.h"
+#include "kinect_interface_primesense/depth_image_data.h"
 #include "math/math_types.h"
 #include "data_str/vector.h"
 #include "clk/clk.h"
@@ -139,7 +140,6 @@ Texture* tex = NULL;
 uint8_t tex_data[src_dim * 3];
 const bool color_point_clouds = false;
 const float point_cloud_scale = 4.0f;
-const uint32_t num_point_clouds_to_render = 1;
 
 // Multithreading
 ThreadPool* tp;
@@ -659,6 +659,12 @@ void KeyboardCB(int key, int scancode, int action, int mods) {
         fitFrame(false, true);
       }
       break;
+    case static_cast<int>('k'):
+    case static_cast<int>('K'):
+      if (action == RELEASED) {
+        cur_kinect = (cur_kinect + 1) % max_kinects;
+      }
+      break;
   }
 }
 
@@ -750,12 +756,9 @@ void renderFrame(float dt) {
   case 1:
     render->renderFrame(dt);
     if (render_depth) {
-      for (uint32_t k = 0; k < std::min<uint32_t>(max_kinects, 
-        num_point_clouds_to_render); k++) {
-        render->renderColoredPointCloud(geometry_points[k], 
-          &camera_view[k], 
+      render->renderColoredPointCloud(geometry_points[cur_kinect], 
+          &camera_view[cur_kinect], 
           point_cloud_scale * 1.5f * static_cast<float>(settings.width) / 4.0f);
-      }
     }
     break;
   case 2:
@@ -809,6 +812,7 @@ int main(int argc, char *argv[]) {
   cout << "o - Change playback frame skip" << endl;
   cout << "l - Go to start frame" << endl;
   cout << "j - Query Objective Function Value" << endl;
+  cout << "k - change the current kinect (render only)" << endl;
   cout << "shift+12345 - Copy finger1234/thumb from last frame" << endl;
   
   try {
@@ -822,8 +826,8 @@ int main(int argc, char *argv[]) {
     Texture::initTextureSystem();
     
     // Fill the settings structure
-    settings.width = src_width * 1.5;
-    settings.height = src_height  *1.5;
+    settings.width = static_cast<int>(static_cast<float>(src_width) * 1.5f);
+    settings.height = static_cast<int>(static_cast<float>(src_height)  *1.5);
     settings.fullscreen = false;
     settings.title = string("Hand Fit Project");
     settings.gl_major_version = 3;
@@ -863,32 +867,8 @@ int main(int argc, char *argv[]) {
     }
  
     // Load the Kinect data for fitting from file and process it
-    char full_path[256];
-    for (uint32_t k = 0; k < max_kinects; k++) {
-      snprintf(full_path, 255, "%sdepth_%d_*", im_dir, k+1);
-      jtil::file_io::ls(full_path, depth_files[k]);
-      snprintf(full_path, 255, "%srgb_%d_*", im_dir, k+1);
-      jtil::file_io::ls(full_path, rgb_files[k]);
-      if (k > 0) {
-        if (depth_files[k].size() != depth_files[0].size() || 
-            rgb_files[k].size() != rgb_files[0].size()) {
-          throw std::runtime_error("Inconsistent number of frames!");
-        }
-      }
-      if (depth_files[k].size() != rgb_files[k].size()) {
-        throw std::runtime_error("Inconsistent number of frames!");
-      }
-
-      snprintf(full_path, 255, "%scalibration_data%d.bin", calib_im_dir, k);
-      if (!fileExists(full_path)) {
-        camera_view[k].identity();
-        std::cout << "**********************************" << std::endl;
-        std::cout << "WARNING: CALIBRATION DATA MISSING!" << std::endl;
-        std::cout << "**********************************" << std::endl;
-      } else {
-        LoadArrayFromFile<float>(camera_view[k].m, 16, full_path);
-      }
-    }
+    GetDataFileNames(max_kinects, im_dir, calib_im_dir, 
+      depth_files, rgb_files, camera_view);
 
 	  // Make sure the 0th index kinect has at least one file
 	  if (depth_files[0].size() < 1) {
@@ -899,7 +879,6 @@ int main(int argc, char *argv[]) {
 #endif
       exit(-1);
     }
-
 
     cur_depth_data = new int16_t*[max_kinects];
     cur_label_data = new uint8_t*[max_kinects];
@@ -942,6 +921,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Load the coeffs from file
+    char full_path[256];
     for (uint32_t i = 0; i < depth_files[0].size(); i++) {
       r_hand_coeffs.pushBack(new HandModelCoeff(kinect_interface_primesense::hand_net::HandType::RIGHT));
       snprintf(full_path, 255, "coeffr_%07d.bin", i+1);

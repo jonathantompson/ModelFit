@@ -159,6 +159,9 @@
     <ClCompile Include="src\kinect_interface_primesense\hand_model.cpp">
       <Filter>Source Files\kinect_interface_primesense</Filter>
     </ClCompile>
+    <ClCompile Include="src\kinect_interface_primesense\depth_image_data.cpp">
+      <Filter>Source Files\kinect_interface_primesense</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\kinect_interface_primesense\depth_image_data.h">

@@ -19,6 +19,7 @@
     <ClCompile Include="src\glew\glewinfo.c" />
     <ClCompile Include="src\glew\visualinfo.c" />
     <ClCompile Include="src\image_util\image_util.cpp" />
+    <ClCompile Include="src\kinect_interface_primesense\depth_image_data.cpp" />
     <ClCompile Include="src\kinect_interface_primesense\hand_model.cpp" />
     <ClCompile Include="src\kinect_interface_primesense\hand_model_coeff.cpp" />
     <ClCompile Include="src\kinect_interface_primesense\kinect_device_listener.cpp" />
@@ -184,7 +185,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\include\WIN7\nite;$(ProjectDir)..\include\WIN7\ni;$(ProjectDir)..\include\WIN7\zmq;$(ProjectDir)..\include\WIN7\GLFW</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\include\WIN7\zmq;$(ProjectDir)..\include\WIN7\GLFW</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PreprocessorDefinitions>_AMD64_;WIN32;BREAK_ON_EXCEPTION_INT;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -202,7 +203,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)..\lib\WIN7;$(ProjectDir)..\lib\WIN7\GLFW</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenNI2.lib;glfw3.lib</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalOptions>/ignore:4006 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
