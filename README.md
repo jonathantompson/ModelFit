@@ -9,7 +9,7 @@ Convolutional Networks" (Jonathan Tompson, Murphy Stein, Yann Lecun, Ken Perlin)
 
 A word of warning: this code is provided **as-is**.  While the quality of the code is not inherently bad, it's just not well organized or user-friendly.
 
-Note that I have made available [example data](https://www.dropbox.com/s/ia99iex8w40lnfa/model_fit_example_data.zip?dl=1).  I highly suggest you download it and extract it into the ```ModelFit/data/``` directory as it is all set up and ready to go.
+Note that I have made available [example data](http://horatio.cs.nyu.edu/mit/tompson/model_fit_example_data.zip).  I highly suggest you download it and extract it into the ```ModelFit/data/``` directory as it is all set up and ready to go.
 
 Lastly, I want to say that the UI is not all that intuitive or easy to use, and for this I apologize.  It is driven by a combination of keystrokes and mouse movements.  At the start of each program a list of possible keystrokes will be printed to the command window.
 
